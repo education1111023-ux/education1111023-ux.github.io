@@ -1,1 +1,1251 @@
-# education1111023-ux.github.io
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>中文小遊戲</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        :root {
+            --grass-color: #4ade80; 
+            --road-color: #334155; 
+            --lane-line: #facc15; 
+            --text-color: #0f172a;
+            --accent-color: #3b82f6; 
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--road-color);
+            font-family: 'Nunito', sans-serif;
+            overflow: hidden; 
+            touch-action: none; 
+            color: var(--text-color);
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            padding: 0.5rem;
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start; 
+            z-index: 10;
+            pointer-events: none;
+            gap: 0.4rem; 
+        }
+
+        .score-box {
+            background-color: rgba(255, 255, 255, 0.85); 
+            padding: 0.25rem 0.75rem; 
+            border-radius: 0.5rem; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+            font-size: 0.9rem; 
+            border: 2px solid var(--accent-color);
+        }
+
+        .health-box {
+            background-color: #fee2e2; 
+            border-width: 3px !important;
+            border-color: #ef4444 !important; 
+            color: #b91c1c !important; 
+            font-size: 1rem; 
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+            animation: pulse-health 1.5s infinite; 
+        }
+
+        @keyframes pulse-health {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        #question-area {
+            position: absolute;
+            top: 7.5rem; 
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        #question-text {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 1rem 2rem; 
+            border-radius: 1.5rem; 
+            font-size: 2.2rem; 
+            font-weight: 900;
+            color: #ea580c; 
+            box-shadow: 0 6px 10px -2px rgba(0, 0, 0, 0.3);
+            border: 4px solid #fdba74; 
+            max-width: 95%;
+            word-wrap: break-word;
+        }
+
+        .menu-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+        }
+
+        .menu-card {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1.5rem;
+            text-align: center;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            border: 4px solid var(--accent-color);
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .btn {
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1.25rem;
+            font-weight: bold;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            margin-bottom: 0.75rem;
+        }
+
+        .btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .feedback-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3.5rem;
+            font-weight: 900;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.5s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .feedback-correct {
+            color: #10b981;
+            text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff;
+        }
+
+        .feedback-wrong {
+            color: #ef4444;
+            text-shadow: 3px 3px 0 #fff, -3px -3px 0 #fff, 3px -3px 0 #fff, -3px 3px 0 #fff;
+        }
+
+        .show-feedback {
+            opacity: 1;
+            transform: translate(-50%, -100%);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        
+        <!-- UI 層 -->
+        <div id="ui-layer">
+            <div class="score-box" style="border-color: #3b82f6; color: #3b82f6;">得分: <span id="score">0</span></div>
+            <div class="score-box" style="border-color: #10b981; color: #10b981;">答對: <span id="correct-count">0</span></div>
+            <div class="score-box health-box">生命: <span id="lives">❤️❤️❤️</span></div>
+        </div>
+
+        <!-- 題目區域 -->
+        <div id="question-area">
+            <div id="question-text" class="hidden">準備中...</div>
+        </div>
+
+        <!-- 遊戲畫布 -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- 答題回饋 -->
+        <div id="feedback-correct" class="feedback-text feedback-correct">答對了! 🌟</div>
+        <div id="feedback-wrong" class="feedback-text feedback-wrong">哎呀! 💥</div>
+
+        <!-- 模式選擇主選單 -->
+        <div id="mode-menu" class="menu-overlay">
+            <div class="menu-card w-full max-w-md">
+                <h1 class="text-4xl font-black mb-6 text-blue-600">中文小遊戲，請使用Google瀏覽器遊玩。</h1>
+                <p class="text-gray-600 mb-6 font-bold">請選擇遊戲種類：</p>
+                <div class="flex flex-col gap-4 px-4">
+                    <button class="btn bg-blue-500 py-5 text-xl shadow-lg flex flex-col items-center justify-center gap-1" onclick="showDifficultyMenu('phonics')">
+                        <span>✍️ 字音字形挑戰</span>
+                        <span class="text-xs font-normal opacity-90">看題目，選出正確注音或國字</span>
+                    </button>
+                    <button class="btn bg-emerald-500 py-5 text-xl shadow-lg flex flex-col items-center justify-center gap-1" onclick="showDifficultyMenu('radical')">
+                        <span>🔍 部首挑戰</span>
+                        <span class="text-xs font-normal opacity-90">看題目，選出部首對應的正確字</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 字音字形難度選擇選單 -->
+        <div id="phonics-menu" class="menu-overlay hidden">
+            <div class="menu-card w-full max-w-md">
+                <h2 class="text-3xl font-black mb-2 text-orange-600">字音字形挑戰 🚗</h2>
+                <p class="text-xs text-gray-500 mb-4">請看上方題目，閃避障礙並選擇正確的字音字形！</p>
+                <h3 class="text-lg font-bold mb-3 text-gray-800">請選擇挑戰年級：</h3>
+                <div class="flex flex-col px-4 gap-1">
+                    <!-- 顏色排列 -->
+                    <button class="btn bg-cyan-500 text-white" onclick="startGame('FIRST', 'phonics')">一年級</button>
+                    <button class="btn bg-green-500 text-white" onclick="startGame('SECOND', 'phonics')">二年級</button>
+                    <button class="btn bg-yellow-500 text-white" onclick="startGame('THIRD', 'phonics')">三年級</button>
+                    <button class="btn bg-orange-500 text-white" onclick="startGame('FOURTH', 'phonics')">四年級</button>
+                    <button class="btn bg-red-500 text-white" onclick="startGame('FIFTH', 'phonics')">五年級</button>
+                    <button class="btn bg-gray-500 text-white mt-2 py-2 text-sm" onclick="backToModeMenu()">⬅️ 返回模式選擇</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 部首練習難度選擇選單 -->
+        <div id="radical-menu" class="menu-overlay hidden">
+            <div class="menu-card w-full max-w-md">
+                <h2 class="text-3xl font-black mb-2 text-emerald-600">部首挑戰 🔍</h2>
+                <p class="text-xs text-gray-500 mb-4">請看上方部首題目，閃避障礙並選擇符合部首的字！</p>
+                <h3 class="text-lg font-bold mb-3 text-gray-800">請選擇挑戰難度：</h3>
+                <div class="flex flex-col px-4 gap-1">
+                    <button class="btn bg-cyan-500 text-white" onclick="startGame('easy', 'radical')">低年級</button>
+                    <button class="btn bg-yellow-500 text-white" onclick="startGame('medium', 'radical')">中年級</button>
+                    <button class="btn bg-red-500 text-white" onclick="startGame('hard', 'radical')">高年級</button>
+                    <button class="btn bg-gray-500 text-white mt-2 py-2 text-sm" onclick="backToModeMenu()">⬅️ 返回模式選擇</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 遊戲結束選單 -->
+        <div id="game-over-menu" class="menu-overlay hidden">
+            <div class="menu-card">
+                <h1 class="text-4xl font-black mb-4 text-red-500">遊戲結束</h1>
+                <p class="text-2xl mb-2 text-blue-600">總得分: <span id="final-score" class="font-bold">0</span></p>
+                <p class="text-2xl mb-6 text-green-600">答對題數: <span id="final-correct" class="font-bold">0</span> 題</p>
+                <button class="btn bg-blue-500" onclick="resetGame()">再玩一次 🔄</button>
+                <button class="btn bg-gray-500" onclick="backToMenu()">回主選單 🏠</button>
+            </div>
+        </div>
+
+    </div>
+
+   <script>
+
+        // ==========================================
+
+        // 🎵 音效管理器 (Web Audio API 合成)
+
+        // ==========================================
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        const SoundManager = {
+
+            isPlayingBGM: false,
+            bgmInterval: null,
+            nextNoteTime: 0,
+            noteIndex: 0,
+
+            init() {
+
+                if (!audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            },
+
+
+            // 汽車變換車道的引擎加速聲
+
+            playEngine() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+
+
+                // 頻率從低音稍微滑高，產生 "Vroom" 的感覺
+
+                osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+                osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+
+
+                // 音量控制
+
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+
+            },
+
+
+
+            // 碰到炸彈的爆炸聲 (白噪音合成)
+
+            playExplosion() {
+                if (!audioCtx) return;
+                const bufferSize = audioCtx.sampleRate * 0.5; // 0.5秒
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; // 產生白噪音
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                // 使用低通濾波器讓聲音悶悶的，像真實爆炸
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.5);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start();
+
+            },
+
+            // 答對的叮咚聲
+
+            playCorrect() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+
+                // 叮 (高音)
+
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
+
+                // 咚 (稍低音)
+                osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.15);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.17);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            },
+
+            // 錯誤的提示聲 (低沉蜂鳴聲)
+
+            playWrong() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+
+
+                // 較低、較沉的頻率
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.25);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            },
+
+            // 金幣聲 (快速的高音爬升)
+
+            playCoin() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            },
+
+            // 吃到愛心的雀躍聲 (大調琶音，類似加一命)
+            playHeart() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle'; 
+                const now = audioCtx.currentTime;
+
+                // C5 -> E5 -> G5 -> C6 (雀躍的向上琶音)
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.3, now + 0.02);
+                gain.gain.setValueAtTime(0.3, now + 0.24);
+                gain.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            },
+
+            // 背景音樂 (8-bit 風格電子節奏)
+            startBGM() {
+                this.init();
+                if (this.isPlayingBGM) return;
+                this.isPlayingBGM = true;
+                this.nextNoteTime = audioCtx.currentTime + 0.1;
+                this.noteIndex = 0;
+                
+                // 簡單的動感貝斯循環音符頻率
+                const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61]; 
+                const playNote = (time, freq) => {
+                    if (!this.isPlayingBGM) return;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square'; // 方波製造復古電子音效
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.02, time); // 音量放小，作為背景音樂
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(time);
+                    osc.stop(time + 0.2);
+                };
+
+                // 持續調度音符
+                this.bgmInterval = setInterval(() => {
+                    if (!this.isPlayingBGM) return;
+                    while (this.nextNoteTime < audioCtx.currentTime + 0.1) {
+                        playNote(this.nextNoteTime, bassNotes[this.noteIndex % bassNotes.length]);
+                        this.nextNoteTime += 0.2; // 節奏速度
+                        this.noteIndex++;
+                    }
+                }, 50);
+            },
+            stopBGM() {
+                this.isPlayingBGM = false;
+                if (this.bgmInterval) {
+                    clearInterval(this.bgmInterval);
+                }
+            }
+        };
+
+        // ==========================================
+        // 📚 題庫設定區 (自訂字音字形與部首題庫)
+        // ==========================================
+        const phonicsQuestionBanks = {
+            FIRST: {
+                "「夢」見": ["ㄇㄥˋ", "ㄇㄣˋ", "ㄇㄨㄥˋ", "ㄇㄥ"],
+                "自「ㄐㄧˇ」": ["己", "已", "乙", "幾"],
+                "「ㄗㄨㄛˋ」夢": ["作", "做", "昨", "炸"],
+                "變「成」": ["ㄔㄥˊ", "ㄔㄣˊ", "ㄘㄣˊ", "ㄘㄥˊ"],
+                "油「ㄓㄚˊ」": ["炸", "作", "昨", "乍"],
+                "「ㄧˇ」經": ["已", "己", "乙", "以"],
+                "「ㄗˋ」己": ["自", "白", "字", "子"],
+                "天「ㄜˊ」": ["鵝", "兒", "鴨", "鳥"],
+                "「ㄇㄧㄢˊ」花": ["棉", "綿", "婂", "帛"],
+                "「ㄧㄢˊ」色": ["顏", "延", "言", "沿"],
+                "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
+                "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
+                "「ㄇㄧㄢˊ」羊": ["綿", "棉", "婂", "帛"]
+            },
+            SECOND: {
+                "神「ㄇㄧˋ」": ["祕", "秘", "蜜", "密"],
+                "「ㄊㄨˋ」子": ["兔", "吐", "免", "土"],
+                "生「病」": ["ㄅㄧㄥˋ", "ㄅㄥˋ", "ㄅㄧㄣˋ", "ㄅㄣˋ"],
+                "可「ㄒㄧˊ」": ["惜", "昔", "錯", "借"],
+                "「ㄏㄡˊ」子": ["猴", "侯", "喉", "後"],
+                "時「ㄏㄡˋ」": ["候", "後", "喉", "猴"],
+                "「ㄅㄢˋ」法": ["辦", "半", "伴", "瓣"],
+                "好好「ㄨㄢˊ」": ["玩", "完", "浣", "烷"],
+                "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
+                "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
+                "可「ㄋㄥˊ」": ["能", "熊", "農", "濃"],
+                "「ㄇㄛˊ」樣": ["模", "膜", "莫", "摸"]
+            },
+            THIRD: {
+                "竹「ㄊㄨㄥˇ」": ["筒", "桐", "同", "銅"],
+                "枝「ㄧㄚ」": ["椏", "芽", "牙", "亞"],
+                "「ㄈㄨˋ」蓋": ["覆", "復", "付", "負"],
+                "花「ㄅㄢˋ」": ["瓣", "半", "伴", "辦"],
+                "花「蕊」": ["ㄖㄨㄟˇ", "ㄌㄨㄟˇ", "ㄖㄟˇ", "ㄌㄟˇ"],
+                "「清」香": ["ㄑㄧㄥ", "ㄑㄧㄣ", "ㄑㄣ", "ㄑㄥ"],
+                "ㄧ「ㄘㄨˋ」簇": ["簇", "醋", "促", "昔"],
+                "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
+                "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
+                "「ㄆㄧㄠ」落": ["飄", "漂", "瓢", "瞟"]
+            },
+            FOURTH: {
+                "足「ㄐㄧ」": ["跡", "雞", "亦", "基"],
+                "「ㄇㄛˊ」樣": ["模", "膜", "莫", "摸"],
+                "傳「ㄕㄨ」": ["輸", "書", "舒", "紓"],
+                "「ㄐㄧㄢˋ」盤": ["鍵", "健", "毽", "建"],
+                "「ㄏㄨㄤ」張": ["慌", "謊", "荒", "黃"],
+                "「ㄏㄨㄤ」唐": ["荒", "謊", "晃", "慌"],
+                "平「均」": ["ㄐㄩㄣ", "ㄐㄩㄥ", "ㄐㄣ", "ㄐㄥ"],
+                "導「致」": ["ㄓˋ", "ㄗˋ", "ㄐˋ", "ㄘˋ"],
+                "「世」界": ["挑戰", "白", "世", "事"],
+                "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
+                "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
+                "變「ㄑㄧㄢ」": ["遷", "迅", "遞", "牽"],
+                "「ㄒㄧ」手": ["攜", "溪", "膝", "提"]
+            },        
+            FIFTH: {
+                "「ㄕㄢˋ」長": ["擅", "檀", "亶", "顫"],
+                "蘇「ㄕˋ」": ["軾", "式", "轍", "士"],
+                "「ㄇㄧㄢˊ」延": ["綿", "棉", "帛", "婂"],
+                "所「ㄨㄟˋ」": ["謂", "胃", "為", "餵"],
+                "「ㄇㄧˊ」漫": ["瀰", "彌", "獼", "濔"],
+                "煙「ㄨˋ」": ["霧", "務", "霾", "需"],
+                "「ㄩㄢˊ」故": ["緣", "綠", "原", "圓"],
+                "「ㄙˋ」廟": ["寺", "室", "飼", "四"],
+                "「淵」博": ["ㄩㄢ", "ㄩㄢˋ", "ㄩㄢˊ", "ㄩㄢˇ"],
+                "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
+                "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
+                "「ㄧㄢˊ」年益壽": ["延", "沿", "研", "炎"]
+            }
+        };
+
+        const radicalQuestionBanks = {
+            easy: {
+                "女": ["媽", "奶", "她", "姐", "妹", "姑"],
+                "人": ["做", "作", "今", "化", "件", "付"],
+                "手": ["把", "拿", "換", "挖", "揚", "探"],
+                "口": ["唱", "吃", "吧", "品", "味", "各"],
+                "水": ["水", "港", "洗", "滴", "清", "流"],
+                "言": ["話", "認", "謝", "訴", "設", "談"],
+                "糸": ["給", "綠", "紫", "糾", "繼", "絆"],
+                "宀": ["完", "家", "它", "寫", "室", "寶"],
+                "木": ["樂", "棉", "楚", "果", "校", "梳"],
+                "辵（辶）": ["過", "送", "道", "連", "選", "透"]
+            },
+            medium: {
+                "心": ["想", "您", "忍", "怒", "慢", "懶", "懂"],
+                "辵（辶）": ["逐", "退", "遠", "返", "逃", "迅", "遞"],
+                "竹": ["箏", "笑", "第", "管", "築", "籍", "符"],
+                "言": ["論", "議", "評", "謝", "診", "討", "訴"],
+                "車": ["輕", "軍", "軟", "較", "輔", "輪", "軌"], 
+                "雨": ["雲", "需", "雷", "電", "霧", "雪", "零"],
+                "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
+                "貝": ["貼", "賞", "貢", "費", "財", "贏", "負"],
+                "馬": ["驚", "駝", "駱", "馴", "騎", "駕", "騰"], 
+                "宀": ["完", "家", "察", "寫", "室", "寶", "宣"],
+                "隹": ["隻", "雀", "雄", "隼", "集", "雙", "雜"],
+                "疒": ["病", "疼", "痺", "疲", "痘", "癌", "痕"]
+            },
+            hard: {
+                "人": ["做", "作", "今", "化", "件", "付"],
+                "竹": ["箏", "笑", "第", "管", "築", "籍", "符"],
+                "疒": ["病", "疼", "痺", "疲", "痘", "癌", "痕"],
+                "頁": ["頭", "顏", "題", "類", "願", "頂", "順"],
+                "貝": ["財", "貢", "貧", "貨", "買", "賣", "貴"],
+                "走": ["起", "超", "越", "趕", "趟", "趁", "趨"],
+                "車": ["轉", "輪", "輕", "載", "較", "輛", "輸"],
+                "酉": ["酸", "醉", "醒", "醜", "醫", "酷", "配"],
+                "門": ["閃", "閉", "開", "閒", "關", "閣", "闊"],
+                "隹": ["隻", "雀", "雄", "雅", "集", "雙", "雜"],
+                "雨": ["雪", "雲", "零", "雷", "電", "需", "震"],
+                "豆": ["豐", "豈"],　
+                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],　
+                "糸": ["給", "綠", "紫", "糾", "繼", "絆"], 
+                "草（艸）": ["蒜", "藥",　"蔥", "菓"], 
+                "月": ["有", "朋", "朔", "朗", "望"],
+                "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
+                "邑(右⻏)": ["部", "郭", "郵", "都", "鄉", "鄰", "郊"],
+                "宀": ["寂", "寵", "察", "寫", "寡", "寶", "宣"],
+                "鬼": ["魅", "魔", "魂"]
+            }
+        };
+
+        let currentBank = {};
+        let questionKeys = [];
+        let currentDifficulty = 'FIRST';
+        let selectedMode = 'phonics'; // 'phonics' 或 'radical'
+        let lastQuestion = null; // 用於記憶上一題的題目名稱，防止連續重複出現
+
+        // ==========================================
+        // 🎮 遊戲核心邏輯區
+        // ==========================================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const carSvgCode = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+          <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
+          <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
+          <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
+          <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
+          <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#ff0000"/>
+          <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#4d4d4d" stroke="#333" stroke-width="4"/>
+          <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
+          <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
+          <rect x="65" y="100" width="70" height="10" fill="#a01d1d"/>
+          <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#2c2c2c"/>
+          <circle cx="50" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
+          <circle cx="150" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
+          <rect x="30" y="125" width="15" height="4" fill="#000"/>
+          <rect x="155" y="125" width="15" height="4" fill="#000"/>
+        </svg>
+        `;
+        const carImage = new Image();
+        carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(carSvgCode);
+
+        const scoreEl = document.getElementById('score');
+        const correctCountEl = document.getElementById('correct-count');
+        const livesEl = document.getElementById('lives');
+        const questionTextEl = document.getElementById('question-text');
+        const startMenu = document.getElementById('start-menu');
+        const gameOverMenu = document.getElementById('game-over-menu');
+        const finalScoreEl = document.getElementById('final-score');
+        const finalCorrectEl = document.getElementById('final-correct');
+        const feedbackCorrect = document.getElementById('feedback-correct');
+        const feedbackWrong = document.getElementById('feedback-wrong');
+
+        let canvasWidth, canvasHeight;
+        const laneCount = 3;
+        let laneWidth;
+        
+        // 速度配置變數
+        let baseSpeed = 2.5; 
+        let currentSpeed = baseSpeed;
+        const speedIncrement = 0.25; 
+        const maxSpeed = 20; 
+
+        let traveledDistance = 0;       
+        let waveTriggerDistance = 0;          
+        let hasSpawnedItem = false;          
+        let hasSpawnedWord = false;            
+
+        let gameState = 'START'; 
+        let score = 0;
+        let correctCount = 0; 
+        let lives = 3;
+        const maxLives = 5;
+        let animationId;
+        
+        let items = []; 
+        let floatingTexts = []; 
+        let roadScrollOffset = 0; 
+
+        const player = {
+            lane: 1, 
+            targetLane: 1,
+            y: 0, 
+            width: 100, 
+            height: 100, 
+            moveSpeed: 0.15, 
+            currentX: 0
+        };
+
+        function resizeCanvas() {
+            canvasWidth = window.innerWidth;
+            canvasHeight = window.innerHeight;
+            canvas.width = canvasWidth;
+            canvas.height = canvasHeight;
+            
+            laneWidth = canvasWidth / laneCount;
+            
+            player.y = canvasHeight - 140;
+            player.currentX = (player.lane * laneWidth) + (laneWidth / 2);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); 
+
+        function moveLeft() {
+            const prevTarget = player.targetLane;
+            if (player.targetLane > 0) player.targetLane--;
+            if (prevTarget !== player.targetLane) {
+                SoundManager.playEngine();
+            }
+        }
+
+        function moveRight() {
+            const prevTarget = player.targetLane;
+            if (player.targetLane < laneCount - 1) player.targetLane++;
+            if (prevTarget !== player.targetLane) {
+                SoundManager.playEngine();
+            }
+        }
+
+        function handleInput(xPos) {
+            if (gameState !== 'PLAYING') return;
+            if (xPos < canvasWidth / 2) {
+                moveLeft();
+            } else {
+                moveRight();
+            }
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (gameState !== 'PLAYING') return;
+            handleInput(e.clientX);
+        });
+
+        // 觸控變數
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchStartTime = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            if (gameState !== 'PLAYING') return;
+            e.preventDefault(); 
+            if (e.touches.length > 0) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                touchStartTime = Date.now();
+            }
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            if (gameState !== 'PLAYING') return;
+            e.preventDefault(); 
+        }, { passive: false });
+
+        canvas.addEventListener('touchend', (e) => {
+            if (gameState !== 'PLAYING') return;
+            e.preventDefault();
+            if (e.changedTouches.length > 0) {
+                const touchEndX = e.changedTouches[0].clientX;
+                const touchEndY = e.changedTouches[0].clientY;
+                const dx = touchEndX - touchStartX;
+                const dy = touchEndY - touchStartY;
+                const dt = Date.now() - touchStartTime;
+
+                if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
+                    if (dx > 0) {
+                        moveRight();
+                    } else {
+                        moveLeft();
+                    }
+                } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15 && dt < 300) {
+                    handleInput(touchEndX);
+                }
+            }
+        }, { passive: false });
+
+        function drawBackground() {
+            ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--road-color');
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            roadScrollOffset += currentSpeed;
+
+            ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--lane-line');
+            ctx.lineWidth = 6;
+            ctx.setLineDash([40, 40]); 
+            ctx.lineDashOffset = -roadScrollOffset; 
+            
+            for (let i = 1; i < laneCount; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * laneWidth, 0);
+                ctx.lineTo(i * laneWidth, canvasHeight);
+                ctx.stroke();
+            }
+            ctx.setLineDash([]); 
+        }
+
+        function updatePlayer() {
+            const targetX = (player.targetLane * laneWidth) + (laneWidth / 2);
+            player.currentX += (targetX - player.currentX) * player.moveSpeed;
+            player.lane = player.targetLane; 
+        }
+
+        function drawPlayer() {
+            const bounce = Math.random() * 1.5; 
+            if (carImage.complete) {
+                ctx.drawImage(
+                    carImage, 
+                    player.currentX - player.width / 2, 
+                    player.y - player.height / 2 + bounce, 
+                    player.width, 
+                    player.height
+                );
+            }
+        }
+
+        function generateQuestion() {
+            if (questionKeys.length === 0) return;
+            
+            let nextQuestion;
+            if (questionKeys.length > 1) {
+                do {
+                    const randomIndex = Math.floor(Math.random() * questionKeys.length);
+                    nextQuestion = questionKeys[randomIndex];
+                } while (nextQuestion === lastQuestion);
+            } else {
+                nextQuestion = questionKeys[0];
+            }
+            
+            currentQuestion = nextQuestion;
+            lastQuestion = currentQuestion;
+            
+            if (selectedMode === 'radical') {
+                questionTextEl.textContent = `請問哪個字的部首是「${currentQuestion}」部？`;
+            } else {
+                questionTextEl.textContent = currentQuestion;
+            }
+            questionTextEl.classList.remove('hidden');
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        class Item {
+            constructor(lane, type, wordText = null, isCorrect = false) {
+                this.lane = lane;
+                this.type = type; 
+                this.x = (lane * laneWidth) + (laneWidth / 2);
+                this.y = -60; 
+                this.isCorrect = isCorrect;
+                this.size = 90; 
+                
+                if (this.type === 'word') {
+                    this.word = wordText; 
+                    this.bgColor = '#ffffff';
+                    this.borderColor = '#64748b'; 
+                    this.textColor = '#0f172a'; 
+                } else if (this.type === 'coin') {
+                    this.emoji = '🪙';
+                } else if (this.type === 'health') {
+                    this.emoji = '💖';
+                } else if (this.type === 'bomb') {
+                    this.emoji = '💣';
+                }
+            }
+
+            update() {
+                this.y += currentSpeed;
+            }
+
+            draw() {
+                if (this.type === 'word') {
+                    const radius = 80;
+                    ctx.fillStyle = this.bgColor;
+                    ctx.strokeStyle = this.borderColor;
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.stroke();
+                    
+                    ctx.fillStyle = this.textColor;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    // === 注音符號/單字 直排繪製邏輯 (非粗體標準線條) ===
+                    const chars = Array.from(this.word);
+                    const toneMarks = ['ˊ', 'ˇ', 'ˋ'];
+                    const neutralTone = '˙';
+                    
+                    let drawList = [];
+                    for (let i = 0; i < chars.length; i++) {
+                        let char = chars[i];
+                        if (toneMarks.includes(char)) {
+                            if (drawList.length > 0) drawList[drawList.length - 1].tone = char;
+                        } else if (char === neutralTone) {
+                            if (drawList.length > 0) drawList[0].topTone = char; 
+                        } else {
+                            drawList.push({ char: char, tone: null, topTone: null });
+                        }
+                    }
+
+                    let fontSize = 80;
+                    let lineHeight = 80;
+                    let toneOffsetX = 35;
+                    
+                    if (drawList.length === 2) {
+                        fontSize = 50;
+                        lineHeight = 55;
+                        toneOffsetX = 25;
+                    } else if (drawList.length >= 3) {
+                        fontSize = 38;
+                        lineHeight = 42;
+                        toneOffsetX = 20;
+                    }
+
+                    ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
+                    
+                    const totalHeight = drawList.length * lineHeight;
+                    let startY = this.y - (totalHeight / 2) + (lineHeight / 2);
+
+                    for (let i = 0; i < drawList.length; i++) {
+                        let item = drawList[i];
+                        
+                        ctx.fillText(item.char, this.x, startY);
+                        
+                        if (item.tone) {
+                            ctx.font = `normal ${fontSize * 0.8}px "標楷體", "Nunito", sans-serif`;
+                            const toneOffsetY = fontSize * 0.25; 
+                            ctx.fillText(item.tone, this.x + toneOffsetX, startY - toneOffsetY);
+                            ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
+                        }
+                        
+                        if (item.topTone) {
+                            ctx.font = `normal ${fontSize * 0.8}px "標楷體", "Nunito", sans-serif`;
+                            ctx.fillText(item.topTone, this.x, startY - lineHeight * 0.6);
+                            ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
+                        }
+                        
+                        startY += lineHeight;
+                    }
+                } else {
+                    ctx.font = '75px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(this.emoji, this.x, this.y);
+                }
+            }
+        }
+
+        function spawnItems() {
+            traveledDistance += currentSpeed;
+
+            if (!hasSpawnedItem && traveledDistance >= waveTriggerDistance + 150) {
+                const lane = Math.floor(Math.random() * laneCount);
+                let type = 'coin';
+                const randChance = Math.random();
+                
+                if (randChance < 0.20 && lives < maxLives) {
+                    type = 'health';
+                } else if (randChance < 0.50) {
+                    type = 'bomb';
+                }
+
+                items.push(new Item(lane, type));
+                hasSpawnedItem = true;
+            }
+
+            if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
+                const correctLane = Math.floor(Math.random() * laneCount);
+                let correctAnswer = "";
+                let shuffledWrongOptions = [];
+
+                if (selectedMode === 'radical') {
+                    const words = currentBank[currentQuestion];
+                    correctAnswer = words[Math.floor(Math.random() * words.length)];
+                    
+                    let wrongWordsPool = [];
+                    questionKeys.forEach(k => {
+                        if (k !== currentQuestion) {
+                            wrongWordsPool = wrongWordsPool.concat(currentBank[k]);
+                        }
+                    });
+                    shuffledWrongOptions = shuffleArray([...new Set(wrongWordsPool)]);
+                } else {
+                    const options = currentBank[currentQuestion];
+                    correctAnswer = options[0];
+                    const wrongOptions = options.slice(1);
+                    shuffledWrongOptions = shuffleArray([...wrongOptions]);
+                }
+                
+                for (let i = 0; i < laneCount; i++) {
+                    const isCorrect = (i === correctLane);
+                    let wordToDisplay;
+                    
+                    if (isCorrect) {
+                        wordToDisplay = correctAnswer;
+                    } else {
+                        if (shuffledWrongOptions.length > 0) {
+                            wordToDisplay = shuffledWrongOptions.pop();
+                        } else {
+                            wordToDisplay = "無";
+                        }
+                    }
+                    
+                    items.push(new Item(i, 'word', wordToDisplay, isCorrect));
+                }
+                hasSpawnedWord = true;
+            } 
+        }
+
+        function showMiniFeedback(text, x, y, color) {
+            floatingTexts.push({ text, x, y, color, life: 40 });
+        }
+
+        function drawFloatingTexts() {
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                const ft = floatingTexts[i];
+                ctx.font = '900 28px Nunito';
+                ctx.textAlign = 'center';
+                ctx.lineWidth = 4;
+                ctx.strokeStyle = '#000';
+                ctx.strokeText(ft.text, ft.x, ft.y);
+                ctx.fillStyle = ft.color;
+                ctx.fillText(ft.text, ft.x, ft.y);
+                ft.y -= 2; 
+                ft.life--;
+                if (ft.life <= 0) floatingTexts.splice(i, 1);
+            }
+        }
+
+        function checkCollisions() {
+            let hitWord = false;
+            let wordFellOff = false;
+
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                const yOverlap = Math.abs(player.y - item.y) < (player.height/2 + item.size/2 - 15); 
+                const xOverlap = player.lane === item.lane;
+
+                if (yOverlap && xOverlap) {
+                    if (item.type === 'word') {
+                        if (item.isCorrect) {
+                            handleCorrectAnswer();
+                        } else {
+                            handleWrongAnswer();
+                        }
+                        hitWord = true;
+                        break; 
+                    } else if (item.type === 'coin') {
+                        SoundManager.playCoin();
+                        score += 5;
+                        scoreEl.textContent = score;
+                        showMiniFeedback('+5', item.x, item.y, '#fde047'); 
+                        items.splice(i, 1); 
+                    } else if (item.type === 'health') {
+                        SoundManager.playHeart();
+                        if (lives < maxLives) {
+                            lives++;
+                            updateLivesDisplay();
+                        }
+                        showMiniFeedback('+1 ❤️', item.x, item.y, '#ef4444'); 
+                        items.splice(i, 1);
+                    } else if (item.type === 'bomb') {
+                        SoundManager.playExplosion();
+                        lives--;
+                        updateLivesDisplay();
+                        showMiniFeedback('💥 -1', item.x, item.y, '#ef4444'); 
+                        showFeedback(feedbackWrong); 
+                        items.splice(i, 1);
+                        if (lives <= 0) endGame();
+                    }
+                } else if (item.y > canvasHeight + 60) {
+                    if (item.type === 'word') {
+                        wordFellOff = true;
+                    }
+                    items.splice(i, 1);
+                }
+            }
+
+            if (hitWord || wordFellOff) {
+                items = []; 
+                waveTriggerDistance = traveledDistance;
+                hasSpawnedItem = false;
+                hasSpawnedWord = false;
+                
+                if (wordFellOff) {
+                    generateQuestion();
+                }
+            }
+        }
+
+        function showFeedback(element) {
+            element.classList.remove('show-feedback');
+            void element.offsetWidth; 
+            element.classList.add('show-feedback');
+            setTimeout(() => element.classList.remove('show-feedback'), 800);
+        }
+
+        function updateLivesDisplay() {
+            let hearts = '';
+            for(let i=0; i<lives; i++) hearts += '❤️';
+            for(let i=lives; i<maxLives; i++) hearts += '🖤';
+            livesEl.textContent = hearts;
+        }
+
+        function handleCorrectAnswer() {
+            SoundManager.playCorrect();
+            score += 10;
+            scoreEl.textContent = score;
+            correctCount++;
+            correctCountEl.textContent = correctCount; 
+            
+            if (currentSpeed < maxSpeed) {
+                currentSpeed += speedIncrement;
+            }
+            showFeedback(feedbackCorrect);
+            generateQuestion();
+        }
+
+        function handleWrongAnswer() {
+            SoundManager.playWrong();
+            lives--;
+            updateLivesDisplay();
+            showFeedback(feedbackWrong);
+            if (lives <= 0) endGame();
+            else generateQuestion();
+        }
+
+        function gameLoop() {
+            if (gameState !== 'PLAYING') return;
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            drawBackground();
+            updatePlayer();
+            drawPlayer();
+            spawnItems();
+            for (let i = 0; i < items.length; i++) {
+                items[i].update();
+                items[i].draw();
+            }
+            checkCollisions();
+            drawFloatingTexts();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function showDifficultyMenu(mode) {
+            selectedMode = mode;
+            document.getElementById('mode-menu').classList.add('hidden');
+            if (mode === 'radical') {
+                document.getElementById('radical-menu').classList.remove('hidden');
+            } else {
+                document.getElementById('phonics-menu').classList.remove('hidden');
+            }
+        }
+
+        function backToModeMenu() {
+            document.getElementById('radical-menu').classList.add('hidden');
+            document.getElementById('phonics-menu').classList.add('hidden');
+            document.getElementById('mode-menu').classList.remove('hidden');
+        }
+
+        function startGame(difficulty, mode) {
+            if (difficulty) {
+                currentDifficulty = difficulty;
+            }
+            if (mode) {
+                selectedMode = mode;
+            }
+            
+            // 根據玩家選擇的模式，動態載入不同的起始速度
+            if (selectedMode === 'radical') {
+                currentBank = radicalQuestionBanks[currentDifficulty];
+                baseSpeed = 2.5; // 部首練習：起始速度
+            } else {
+                currentBank = phonicsQuestionBanks[currentDifficulty];
+                baseSpeed = 2.5; // 字音字形：起始速度 
+            }
+            
+            questionKeys = Object.keys(currentBank);
+
+            document.getElementById('mode-menu').classList.add('hidden');
+            document.getElementById('phonics-menu').classList.add('hidden');
+            document.getElementById('radical-menu').classList.add('hidden');
+            gameOverMenu.classList.add('hidden');
+            
+            score = 0;
+            correctCount = 0; 
+            lives = 3;
+            currentSpeed = baseSpeed; // 這裡會動態套用上面設定好的 baseSpeed
+            lastQuestion = null;
+
+            items = [];
+            floatingTexts = [];
+            traveledDistance = 0;
+            roadScrollOffset = 0;
+            
+            waveTriggerDistance = 0;
+            hasSpawnedItem = false;
+            hasSpawnedWord = false;
+
+            player.targetLane = 1;
+            player.lane = 1;
+            
+            scoreEl.textContent = score;
+            correctCountEl.textContent = correctCount; 
+            updateLivesDisplay();
+            
+            gameState = 'PLAYING';
+            generateQuestion();
+            
+            SoundManager.startBGM();
+
+            if (animationId) cancelAnimationFrame(animationId);
+            gameLoop();
+        }
+
+        function resetGame() {
+            startGame(currentDifficulty, selectedMode);
+        }
+
+        function backToMenu() {
+            SoundManager.stopBGM();
+            gameOverMenu.classList.add('hidden');
+            document.getElementById('mode-menu').classList.remove('hidden');
+            questionTextEl.classList.add('hidden');
+        }
+
+        function endGame() {
+            gameState = 'GAMEOVER';
+            SoundManager.stopBGM();
+            cancelAnimationFrame(animationId);
+            finalScoreEl.textContent = score;
+            finalCorrectEl.textContent = correctCount; 
+            questionTextEl.classList.add('hidden');
+            gameOverMenu.classList.remove('hidden');
+        }
+
+    </script>
+</body>
+</html>
