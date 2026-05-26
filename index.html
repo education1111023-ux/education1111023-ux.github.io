@@ -209,7 +209,7 @@
         <div id="mode-menu" class="menu-overlay">
             <div class="menu-card w-full max-w-md">
                 <h1 class="text-4xl font-black mb-6 text-blue-600">中文小遊戲</h1>
-                <p class="text-gray-600 mb-6 font-bold">請選擇你要挑戰的學習遊戲：</p>
+                <p class="text-gray-600 mb-6 font-bold">請選擇你要挑戰的遊戲：</p>
                 <div class="flex flex-col gap-4 px-4">
                     <button class="btn bg-blue-500 py-5 text-xl shadow-lg flex flex-col items-center justify-center gap-1" onclick="showDifficultyMenu('phonics')">
                         <span>✍️ 字音字形挑戰</span>
@@ -256,7 +256,7 @@
                                 <rect x="155" y="125" width="15" height="4" fill="#000"/>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🏎️ 紅跑車</div>
+                        <div class="font-black text-lg text-gray-800">🏎️ 紅跑車(速度2.5)</div>
                     </div>
                     <!-- 警車 -->
                     <div id="vc-police" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('police')">
@@ -397,7 +397,7 @@
     </div>
 
     <script>
-       // ==========================================
+        // ==========================================
 
         // 🎵 音效管理器 (Web Audio API 合成)
 
@@ -612,7 +612,8 @@
                 }
             }
         };
-       // ==========================================
+
+        // ==========================================
         // 📚 題庫設定區 (自訂字音字形與部首題庫)
         // ==========================================
         const phonicsQuestionBanks = {
@@ -738,12 +739,16 @@
                 "鬼": ["魅", "魔", "魂"]
             }
         };
-
+        // ==========================================
+        // 📊 全域狀態變數
+        // ==========================================
         let currentBank = {};
         let questionKeys = [];
         let currentDifficulty = 'FIRST';
         let selectedMode = 'phonics'; // 'phonics' 或 'radical'
         let lastQuestion = null; // 用於記憶上一題的題目名稱，防止連續重複出現
+        let currentVehicle = 'sports'; // 當前選用的載具座駕
+
         // ==========================================
         // 🚗 載具座駕 SVG 暨屬性設定
         // ==========================================
@@ -861,13 +866,6 @@
                 `
             }
         };
-
-        let currentBank = {};
-        let questionKeys = [];
-        let currentDifficulty = 'FIRST';
-        let selectedMode = 'phonics'; // 'phonics' 或 'radical'
-        let lastQuestion = null; // 用於記憶上一題的題目名稱，防止連續重複出現
-        let currentVehicle = 'sports'; // 當前選用的載具座駕
 
         // ==========================================
         // 🎮 遊戲核心邏輯區
@@ -1097,7 +1095,7 @@
             // 更新主畫面上的載具資訊標籤
             const label = document.getElementById('selected-vehicle-label');
             if (label) {
-                label.textContent = `🚗 目前座駕: ${VEHICLE_PRESETS[currentVehicle].name} ${VEHICLE_PRESETS[currentVehicle].emoji}`;
+                label.textContent = `🚗 目前座駕: ${VEHICLE_PRESETS[currentVehicle].name}(速度${VEHICLE_PRESETS[currentVehicle].baseSpeed}) ${VEHICLE_PRESETS[currentVehicle].emoji}`;
             }
         }
 
