@@ -398,17 +398,22 @@
 
     <script>
         // ==========================================
+
         // 🎵 音效管理器 (Web Audio API 合成)
+
         // ==========================================
+
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         const SoundManager = {
+
             isPlayingBGM: false,
             bgmInterval: null,
             nextNoteTime: 0,
             noteIndex: 0,
 
             init() {
+
                 if (!audioCtx) {
                     audioCtx = new AudioContext();
                 }
@@ -417,14 +422,25 @@
                 }
             },
 
+
+            // 汽車變換車道的引擎加速聲
+
             playEngine() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
+
+
+                // 頻率從低音稍微滑高，產生 "Vroom" 的感覺
+
                 osc.frequency.setValueAtTime(60, audioCtx.currentTime);
                 osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1);
                 osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+
+
+                // 音量控制
+
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
@@ -432,7 +448,12 @@
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.3);
+
             },
+
+
+
+            // 碰到炸彈的爆炸聲 (白噪音合成)
 
             playExplosion() {
                 if (!audioCtx) return;
@@ -444,6 +465,9 @@
                 }
                 const noise = audioCtx.createBufferSource();
                 noise.buffer = buffer;
+
+                // 使用低通濾波器讓聲音悶悶的，像真實爆炸
+
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'lowpass';
                 filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
@@ -455,14 +479,22 @@
                 filter.connect(gain);
                 gain.connect(audioCtx.destination);
                 noise.start();
+
             },
+
+            // 答對的叮咚聲
 
             playCorrect() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
+
+                // 叮 (高音)
+
                 osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
+
+                // 咚 (稍低音)
                 osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
@@ -475,11 +507,16 @@
                 osc.stop(audioCtx.currentTime + 0.4);
             },
 
+            // 錯誤的提示聲 (低沉蜂鳴聲)
+
             playWrong() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
+
+
+                // 較低、較沉的頻率
                 osc.frequency.setValueAtTime(150, audioCtx.currentTime);
                 osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
@@ -492,13 +529,15 @@
                 osc.stop(audioCtx.currentTime + 0.35);
             },
 
+            // 金幣聲 (快速的高音爬升)
+
             playCoin() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); 
-                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); 
+                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08);
@@ -509,12 +548,15 @@
                 osc.stop(audioCtx.currentTime + 0.2);
             },
 
+            // 吃到愛心的雀躍聲 (大調琶音，類似加一命)
             playHeart() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle'; 
                 const now = audioCtx.currentTime;
+
+                // C5 -> E5 -> G5 -> C6 (雀躍的向上琶音)
                 osc.frequency.setValueAtTime(523.25, now);
                 osc.frequency.setValueAtTime(659.25, now + 0.08);
                 osc.frequency.setValueAtTime(783.99, now + 0.16);
@@ -529,31 +571,36 @@
                 osc.stop(now + 0.4);
             },
 
+            // 背景音樂 (8-bit 風格電子節奏)
             startBGM() {
                 this.init();
                 if (this.isPlayingBGM) return;
                 this.isPlayingBGM = true;
                 this.nextNoteTime = audioCtx.currentTime + 0.1;
                 this.noteIndex = 0;
+                
+                // 簡單的動感貝斯循環音符頻率
                 const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61]; 
                 const playNote = (time, freq) => {
                     if (!this.isPlayingBGM) return;
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'square'; 
+                    osc.type = 'square'; // 方波製造復古電子音效
                     osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.02, time); 
+                    gain.gain.setValueAtTime(0.02, time); // 音量放小，作為背景音樂
                     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start(time);
                     osc.stop(time + 0.2);
                 };
+
+                // 持續調度音符
                 this.bgmInterval = setInterval(() => {
                     if (!this.isPlayingBGM) return;
                     while (this.nextNoteTime < audioCtx.currentTime + 0.1) {
                         playNote(this.nextNoteTime, bassNotes[this.noteIndex % bassNotes.length]);
-                        this.nextNoteTime += 0.2; 
+                        this.nextNoteTime += 0.2; // 節奏速度
                         this.noteIndex++;
                     }
                 }, 50);
@@ -692,7 +739,6 @@
                 "鬼": ["魅", "魔", "魂"]
             }
         };
-
         // ==========================================
         // 📊 全域狀態變數
         // ==========================================
@@ -882,6 +928,7 @@
         let items = []; 
         let floatingTexts = []; 
         let roadScrollOffset = 0; 
+        let chaseScore = 0; // 新增：用於記錄警車追捕進度
 
         const player = {
             lane: 1, 
@@ -1024,14 +1071,19 @@
         function updateRobberCar() {
             if (!robberCar.active) return;
             
-            // 計算距離：答對 0 題在很前面，答對 20 題時距離歸零 (剛好在警車前)
-            let progress = Math.min(correctCount / 20, 1);
-            let startY = 80;
-            let endY = player.y - 120; // 追上時在玩家車頭前方
-            let targetY = startY + (endY - startY) * progress;
+            // 追捕進度：小於 3 題時隱藏在畫面外，3題之後依據 chaseScore 計算距離
+            if (chaseScore < 3) {
+                robberCar.targetY = -300; // 在畫面外
+            } else {
+                // 從第 3 題到第 20 題，進度從 0 到 100%
+                let progress = Math.min((chaseScore - 3) / 17, 1);
+                let startY = 80;
+                let endY = player.y - 120; // 追上時在玩家車頭前方
+                robberCar.targetY = startY + (endY - startY) * progress;
+            }
             
             // 平滑追趕動畫
-            robberCar.y += (targetY - robberCar.y) * 0.05;
+            robberCar.y += (robberCar.targetY - robberCar.y) * 0.05;
             
             // 搶匪不時變換車道蛇行
             robberCar.laneChangeTimer++;
@@ -1405,6 +1457,7 @@
             score += 10;
             scoreEl.textContent = score;
             correctCount++;
+            chaseScore++; // 答對拉近追捕距離
             correctCountEl.textContent = correctCount; 
             
             if (currentSpeed < maxSpeed) {
@@ -1412,8 +1465,8 @@
             }
             showFeedback(feedbackCorrect);
             
-            // 🚨 警車模式專屬破關條件：答對 20 題抓到紅色跑車！
-            if (currentVehicle === 'police' && correctCount >= 20) {
+            // 🚨 警車模式專屬破關條件：追捕進度達到 20 抓到紅色跑車！
+            if (currentVehicle === 'police' && chaseScore >= 20) {
                 setTimeout(() => endGame(true), 500); 
             } else {
                 generateQuestion();
@@ -1423,6 +1476,7 @@
         function handleWrongAnswer() {
             SoundManager.playWrong();
             lives--;
+            chaseScore = Math.max(0, chaseScore - 1); // 答錯距離拉長，最低退回0
             updateLivesDisplay();
             showFeedback(feedbackWrong);
             if (lives <= 0) endGame(false);
@@ -1490,8 +1544,9 @@
             
             score = 0;
             correctCount = 0; 
+            chaseScore = 0; // 重置追捕進度
             lives = 3;
-            currentSpeed = baseSpeed; 
+            currentSpeed = baseSpeed; // 這裡會動態套用上面設定好的 baseSpeed
             lastQuestion = null;
 
             items = [];
@@ -1509,8 +1564,8 @@
             // 🚨 初始化搶匪車的狀態與位置
             if (currentVehicle === 'police') {
                 robberCar.active = true;
-                robberCar.y = 80;
-                robberCar.targetY = 80;
+                robberCar.y = -300; // 初始在畫面最上方隱藏
+                robberCar.targetY = -300;
                 robberCar.currentX = (1 * laneWidth) + (laneWidth / 2);
                 robberCar.lane = 1;
                 robberCar.targetLane = 1;
