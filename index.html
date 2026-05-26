@@ -209,7 +209,7 @@
         <div id="mode-menu" class="menu-overlay">
             <div class="menu-card w-full max-w-md">
                 <h1 class="text-4xl font-black mb-6 text-blue-600">中文小遊戲</h1>
-                <p class="text-gray-600 mb-6 font-bold">請選擇你要挑戰的遊戲：</p>
+                <p class="text-gray-600 mb-6 font-bold">請選擇你要挑戰的學習遊戲：</p>
                 <div class="flex flex-col gap-4 px-4">
                     <button class="btn bg-blue-500 py-5 text-xl shadow-lg flex flex-col items-center justify-center gap-1" onclick="showDifficultyMenu('phonics')">
                         <span>✍️ 字音字形挑戰</span>
@@ -280,7 +280,7 @@
                                 <path d="M 100 110 L 103 118 L 111 118 L 105 123 L 107 131 L 100 126 L 93 131 L 95 123 L 89 118 L 97 118 Z" fill="#eab308"/>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚓 警車(速度5.5)</div>
+                        <div class="font-black text-lg text-gray-800">🚓 警車(追捕搶匪, 速度3.5)</div>
                     </div>
                     <!-- 黃計程車 -->
                     <div id="vc-taxi" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('taxi')">
@@ -311,7 +311,7 @@
                                 <text x="100" y="36" font-family="Nunito, sans-serif" font-weight="900" font-size="12" fill="#000" text-anchor="middle">TAXI</text>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚕 黃計程車(速度4.0)</div>
+                        <div class="font-black text-lg text-gray-800">🚕 黃計程車(速度2.0)</div>
                     </div>
                     <!-- 腳踏車 -->
                     <div id="vc-bicycle" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('bicycle')">
@@ -343,7 +343,7 @@
                                 <rect x="96" y="38" width="8" height="6" fill="#fff" rx="1"/>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚲 腳踏車(沒有任何道具與炸彈，速度1.5)</div>
+                        <div class="font-black text-lg text-gray-800">🚲 腳踏車(無道具干擾, 速度1.5)</div>
                     </div>
                 </div>
                 
@@ -386,7 +386,7 @@
         <!-- 遊戲結束選單 -->
         <div id="game-over-menu" class="menu-overlay hidden">
             <div class="menu-card">
-                <h1 class="text-4xl font-black mb-4 text-red-500">遊戲結束</h1>
+                <h1 id="game-over-title" class="text-4xl font-black mb-4 text-red-500">遊戲結束</h1>
                 <p class="text-2xl mb-2 text-blue-600">總得分: <span id="final-score" class="font-bold">0</span></p>
                 <p class="text-2xl mb-6 text-green-600">答對題數: <span id="final-correct" class="font-bold">0</span> 題</p>
                 <button class="btn bg-blue-500" onclick="resetGame()">再玩一次 🔄</button>
@@ -398,22 +398,17 @@
 
     <script>
         // ==========================================
-
         // 🎵 音效管理器 (Web Audio API 合成)
-
         // ==========================================
-
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         const SoundManager = {
-
             isPlayingBGM: false,
             bgmInterval: null,
             nextNoteTime: 0,
             noteIndex: 0,
 
             init() {
-
                 if (!audioCtx) {
                     audioCtx = new AudioContext();
                 }
@@ -422,25 +417,14 @@
                 }
             },
 
-
-            // 汽車變換車道的引擎加速聲
-
             playEngine() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-
-
-                // 頻率從低音稍微滑高，產生 "Vroom" 的感覺
-
                 osc.frequency.setValueAtTime(60, audioCtx.currentTime);
                 osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1);
                 osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
-
-
-                // 音量控制
-
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
                 gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
@@ -448,12 +432,7 @@
                 gain.connect(audioCtx.destination);
                 osc.start();
                 osc.stop(audioCtx.currentTime + 0.3);
-
             },
-
-
-
-            // 碰到炸彈的爆炸聲 (白噪音合成)
 
             playExplosion() {
                 if (!audioCtx) return;
@@ -465,9 +444,6 @@
                 }
                 const noise = audioCtx.createBufferSource();
                 noise.buffer = buffer;
-
-                // 使用低通濾波器讓聲音悶悶的，像真實爆炸
-
                 const filter = audioCtx.createBiquadFilter();
                 filter.type = 'lowpass';
                 filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
@@ -479,22 +455,14 @@
                 filter.connect(gain);
                 gain.connect(audioCtx.destination);
                 noise.start();
-
             },
-
-            // 答對的叮咚聲
 
             playCorrect() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-
-                // 叮 (高音)
-
                 osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
-
-                // 咚 (稍低音)
                 osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
@@ -507,16 +475,11 @@
                 osc.stop(audioCtx.currentTime + 0.4);
             },
 
-            // 錯誤的提示聲 (低沉蜂鳴聲)
-
             playWrong() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-
-
-                // 較低、較沉的頻率
                 osc.frequency.setValueAtTime(150, audioCtx.currentTime);
                 osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
@@ -529,15 +492,13 @@
                 osc.stop(audioCtx.currentTime + 0.35);
             },
 
-            // 金幣聲 (快速的高音爬升)
-
             playCoin() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
-                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
+                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); 
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); 
                 gain.gain.setValueAtTime(0, audioCtx.currentTime);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
                 gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08);
@@ -548,15 +509,12 @@
                 osc.stop(audioCtx.currentTime + 0.2);
             },
 
-            // 吃到愛心的雀躍聲 (大調琶音，類似加一命)
             playHeart() {
                 if (!audioCtx) return;
                 const osc = audioCtx.createOscillator();
                 const gain = audioCtx.createGain();
                 osc.type = 'triangle'; 
                 const now = audioCtx.currentTime;
-
-                // C5 -> E5 -> G5 -> C6 (雀躍的向上琶音)
                 osc.frequency.setValueAtTime(523.25, now);
                 osc.frequency.setValueAtTime(659.25, now + 0.08);
                 osc.frequency.setValueAtTime(783.99, now + 0.16);
@@ -571,36 +529,31 @@
                 osc.stop(now + 0.4);
             },
 
-            // 背景音樂 (8-bit 風格電子節奏)
             startBGM() {
                 this.init();
                 if (this.isPlayingBGM) return;
                 this.isPlayingBGM = true;
                 this.nextNoteTime = audioCtx.currentTime + 0.1;
                 this.noteIndex = 0;
-                
-                // 簡單的動感貝斯循環音符頻率
                 const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61]; 
                 const playNote = (time, freq) => {
                     if (!this.isPlayingBGM) return;
                     const osc = audioCtx.createOscillator();
                     const gain = audioCtx.createGain();
-                    osc.type = 'square'; // 方波製造復古電子音效
+                    osc.type = 'square'; 
                     osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.02, time); // 音量放小，作為背景音樂
+                    gain.gain.setValueAtTime(0.02, time); 
                     gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
                     osc.connect(gain);
                     gain.connect(audioCtx.destination);
                     osc.start(time);
                     osc.stop(time + 0.2);
                 };
-
-                // 持續調度音符
                 this.bgmInterval = setInterval(() => {
                     if (!this.isPlayingBGM) return;
                     while (this.nextNoteTime < audioCtx.currentTime + 0.1) {
                         playNote(this.nextNoteTime, bassNotes[this.noteIndex % bassNotes.length]);
-                        this.nextNoteTime += 0.2; // 節奏速度
+                        this.nextNoteTime += 0.2; 
                         this.noteIndex++;
                     }
                 }, 50);
@@ -614,7 +567,7 @@
         };
 
         // ==========================================
-        // 📚 題庫設定區 (自訂字音字形與部首題庫)
+        // 📚 題庫設定區
         // ==========================================
         const phonicsQuestionBanks = {
             FIRST: {
@@ -667,7 +620,7 @@
                 "「ㄏㄨㄤ」唐": ["荒", "謊", "晃", "慌"],
                 "平「均」": ["ㄐㄩㄣ", "ㄐㄩㄥ", "ㄐㄣ", "ㄐㄥ"],
                 "導「致」": ["ㄓˋ", "ㄗˋ", "ㄐˋ", "ㄘˋ"],
-                "「世」界": ["挑戰", "白", "世", "事"],
+                "「世」界": ["ㄕˋ", "ㄗˋ", "ㄙˋ", "ㄓˋ"],
                 "「應」該": ["ㄧㄥ", "ㄧㄣ", "ㄩㄣ", "ㄩㄥ"],
                 "「因」為": ["ㄧㄣ", "ㄧㄥ", "ㄩㄣ", "ㄩㄥ"],
                 "變「ㄑㄧㄢ」": ["遷", "迅", "遞", "牽"],
@@ -713,7 +666,7 @@
                 "貝": ["貼", "賞", "貢", "費", "財", "贏", "負"],
                 "馬": ["驚", "駝", "駱", "馴", "騎", "駕", "騰"], 
                 "宀": ["完", "家", "察", "寫", "室", "寶", "宣"],
-                "隹": ["隻", "雀", "雄", "隼", "集", "雙", "雜"],
+                "隹": ["隻", "雀", "雄", "雙", "雜"],
                 "疒": ["病", "疼", "痺", "疲", "痘", "癌", "痕"]
             },
             hard: {
@@ -728,10 +681,10 @@
                 "門": ["閃", "閉", "開", "閒", "關", "閣", "闊"],
                 "隹": ["隻", "雀", "雄", "雅", "集", "雙", "雜"],
                 "雨": ["雪", "雲", "零", "雷", "電", "需", "震"],
-                "豆": ["豐", "豈"],　
-                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],　
+                "豆": ["豐", "豈"],
+                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],
                 "糸": ["給", "綠", "紫", "糾", "繼", "絆"], 
-                "草（艸）": ["蒜", "藥",　"蔥", "菓"], 
+                "草（艸）": ["蒜", "藥", "蔥", "菓"], 
                 "月": ["有", "朋", "朔", "朗", "望"],
                 "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
                 "邑(右⻏)": ["部", "郭", "郵", "都", "鄉", "鄰", "郊"],
@@ -739,15 +692,16 @@
                 "鬼": ["魅", "魔", "魂"]
             }
         };
+
         // ==========================================
         // 📊 全域狀態變數
         // ==========================================
         let currentBank = {};
         let questionKeys = [];
         let currentDifficulty = 'FIRST';
-        let selectedMode = 'phonics'; // 'phonics' 或 'radical'
-        let lastQuestion = null; // 用於記憶上一題的題目名稱，防止連續重複出現
-        let currentVehicle = 'sports'; // 當前選用的載具座駕
+        let selectedMode = 'phonics'; 
+        let lastQuestion = null; 
+        let currentVehicle = 'sports'; 
 
         // ==========================================
         // 🚗 載具座駕 SVG 暨屬性設定
@@ -779,7 +733,7 @@
             police: {
                 name: "警車",
                 emoji: "🚓",
-                baseSpeed: 5.5,
+                baseSpeed: 3.5,
                 svg: `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                   <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
@@ -804,7 +758,7 @@
             taxi: {
                 name: "黃計程車",
                 emoji: "🚕",
-                baseSpeed: 4.0,
+                baseSpeed: 2.0,
                 svg: `
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
                   <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
@@ -877,6 +831,22 @@
         const carImage = new Image();
         carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS[currentVehicle].svg);
 
+        // 搶匪車圖片與狀態設定
+        const robberImage = new Image();
+        robberImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS['sports'].svg);
+
+        let robberCar = {
+            active: false,
+            y: 50,
+            targetY: 50,
+            currentX: 0,
+            lane: 1,
+            targetLane: 1,
+            width: 100,
+            height: 100,
+            laneChangeTimer: 0
+        };
+
         const scoreEl = document.getElementById('score');
         const correctCountEl = document.getElementById('correct-count');
         const livesEl = document.getElementById('lives');
@@ -892,7 +862,6 @@
         const laneCount = 3;
         let laneWidth;
         
-        // 速度配置變數
         let baseSpeed = 2.5; 
         let currentSpeed = baseSpeed;
         const speedIncrement = 0.25; 
@@ -969,7 +938,6 @@
             handleInput(e.clientX);
         });
 
-        // 觸控變數
         let touchStartX = 0;
         let touchStartY = 0;
         let touchStartTime = 0;
@@ -1050,6 +1018,58 @@
             }
         }
 
+        // ==========================================
+        // 🚨 搶匪車動畫邏輯 (僅警車模式觸發)
+        // ==========================================
+        function updateRobberCar() {
+            if (!robberCar.active) return;
+            
+            // 計算距離：答對 0 題在很前面，答對 20 題時距離歸零 (剛好在警車前)
+            let progress = Math.min(correctCount / 20, 0);
+            let startY = 60;
+            let endY = player.y - 120; // 追上時在玩家車頭前方
+            let targetY = startY + (endY - startY) * progress;
+            
+            // 平滑追趕動畫
+            robberCar.y += (targetY - robberCar.y) * 0.05;
+            
+            // 搶匪不時變換車道蛇行
+            robberCar.laneChangeTimer++;
+            if (robberCar.laneChangeTimer > 150) { 
+                let possibleLanes = [0, 1, 2].filter(l => l !== robberCar.targetLane);
+                robberCar.targetLane = possibleLanes[Math.floor(Math.random() * possibleLanes.length)];
+                robberCar.laneChangeTimer = 0;
+            }
+            
+            const targetX = (robberCar.targetLane * laneWidth) + (laneWidth / 2);
+            robberCar.currentX += (targetX - robberCar.currentX) * 0.05;
+        }
+
+        function drawRobberCar() {
+            if (!robberCar.active) return;
+            const bounce = Math.random() * 1.5; 
+            if (robberImage.complete) {
+                // 畫搶匪車
+                ctx.drawImage(
+                    robberImage, 
+                    robberCar.currentX - robberCar.width / 2, 
+                    robberCar.y - robberCar.height / 2 + bounce, 
+                    robberCar.width, 
+                    robberCar.height
+                );
+                
+                // 畫紅色警示光環 (底盤燈效果)
+                ctx.save();
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = "red";
+                ctx.fillStyle = "rgba(255, 0, 0, 0.3)";
+                ctx.beginPath();
+                ctx.ellipse(robberCar.currentX, robberCar.y + 40, 40, 15, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
         function generateQuestion() {
             if (questionKeys.length === 0) return;
             
@@ -1082,7 +1102,6 @@
             return array;
         }
 
-        // === 座駕載具選擇管理函式 ===
         function openVehicleMenu() {
             document.getElementById('mode-menu').classList.add('hidden');
             document.getElementById('vehicle-menu').classList.remove('hidden');
@@ -1092,21 +1111,19 @@
             document.getElementById('vehicle-menu').classList.add('hidden');
             document.getElementById('mode-menu').classList.remove('hidden');
             
-            // 更新主畫面上的載具資訊標籤
             const label = document.getElementById('selected-vehicle-label');
             if (label) {
-                label.textContent = `🚗 目前座駕: ${VEHICLE_PRESETS[currentVehicle].name}(速度${VEHICLE_PRESETS[currentVehicle].baseSpeed}) ${VEHICLE_PRESETS[currentVehicle].emoji}`;
+                let extraText = currentVehicle === "police" ? "追捕搶匪, " : (currentVehicle === "bicycle" ? "無道具干擾, " : "");
+                label.textContent = `🚗 目前座駕: ${VEHICLE_PRESETS[currentVehicle].name}(${extraText}速度${VEHICLE_PRESETS[currentVehicle].baseSpeed}) ${VEHICLE_PRESETS[currentVehicle].emoji}`;
             }
         }
 
         function selectVehicle(key) {
             currentVehicle = key;
             
-            // 變更目前遊戲中車子的 SVG 圖片來源
             const svgCode = VEHICLE_PRESETS[key].svg;
             carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgCode);
             
-            // 更新卡片的選擇狀態樣式
             document.querySelectorAll('.vehicle-card').forEach(card => {
                 card.classList.remove('border-blue-500', 'bg-blue-50');
                 card.classList.add('border-gray-200');
@@ -1160,7 +1177,6 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
 
-                    // === 注音符號/單字 直排繪製邏輯 (非粗體標準線條) ===
                     const chars = Array.from(this.word);
                     const toneMarks = ['ˊ', 'ˇ', 'ˋ'];
                     const neutralTone = '˙';
@@ -1228,7 +1244,6 @@
         function spawnItems() {
             traveledDistance += currentSpeed;
 
-            // 距離上一波結束後，經過 150px 固定產生「一個」道具 (腳踏車模式不產生道具與金幣)
             if (!hasSpawnedItem && traveledDistance >= waveTriggerDistance + 150) {
                 if (currentVehicle !== 'bicycle') {
                     const lane = Math.floor(Math.random() * laneCount);
@@ -1246,7 +1261,6 @@
                 hasSpawnedItem = true;
             }
 
-            // 經過 500px 後，才產生國字/注音泡泡
             if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
                 const correctLane = Math.floor(Math.random() * laneCount);
                 let correctAnswer = "";
@@ -1350,7 +1364,7 @@
                         showMiniFeedback('💥 -1', item.x, item.y, '#ef4444'); 
                         showFeedback(feedbackWrong); 
                         items.splice(i, 1);
-                        if (lives <= 0) endGame();
+                        if (lives <= 0) endGame(false);
                     }
                 } else if (item.y > canvasHeight + 60) {
                     if (item.type === 'word') {
@@ -1397,7 +1411,13 @@
                 currentSpeed += speedIncrement;
             }
             showFeedback(feedbackCorrect);
-            generateQuestion();
+            
+            // 🚨 警車模式專屬破關條件：答對 20 題抓到紅色跑車！
+            if (currentVehicle === 'police' && correctCount >= 20) {
+                setTimeout(() => endGame(true), 500); 
+            } else {
+                generateQuestion();
+            }
         }
 
         function handleWrongAnswer() {
@@ -1405,7 +1425,7 @@
             lives--;
             updateLivesDisplay();
             showFeedback(feedbackWrong);
-            if (lives <= 0) endGame();
+            if (lives <= 0) endGame(false);
             else generateQuestion();
         }
 
@@ -1413,6 +1433,11 @@
             if (gameState !== 'PLAYING') return;
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             drawBackground();
+            
+            // 畫出搶匪紅色跑車
+            updateRobberCar();
+            drawRobberCar();
+            
             updatePlayer();
             drawPlayer();
             spawnItems();
@@ -1449,16 +1474,13 @@
                 selectedMode = mode;
             }
             
-            // 根據玩家選擇的模式動態載入對應題庫
             if (selectedMode === 'radical') {
                 currentBank = radicalQuestionBanks[currentDifficulty];
             } else {
                 currentBank = phonicsQuestionBanks[currentDifficulty];
             }
             
-            // 根據選擇的汽車載具設定起始速度
             baseSpeed = VEHICLE_PRESETS[currentVehicle].baseSpeed;
-            
             questionKeys = Object.keys(currentBank);
 
             document.getElementById('mode-menu').classList.add('hidden');
@@ -1469,7 +1491,7 @@
             score = 0;
             correctCount = 0; 
             lives = 3;
-            currentSpeed = baseSpeed; // 這裡會動態套用上面設定好的 baseSpeed
+            currentSpeed = baseSpeed; 
             lastQuestion = null;
 
             items = [];
@@ -1483,6 +1505,19 @@
 
             player.targetLane = 1;
             player.lane = 1;
+            
+            // 🚨 初始化搶匪車的狀態與位置
+            if (currentVehicle === 'police') {
+                robberCar.active = true;
+                robberCar.y = 80;
+                robberCar.targetY = 80;
+                robberCar.currentX = (1 * laneWidth) + (laneWidth / 2);
+                robberCar.lane = 1;
+                robberCar.targetLane = 1;
+                robberCar.laneChangeTimer = 0;
+            } else {
+                robberCar.active = false;
+            }
             
             scoreEl.textContent = score;
             correctCountEl.textContent = correctCount; 
@@ -1508,13 +1543,25 @@
             questionTextEl.classList.add('hidden');
         }
 
-        function endGame() {
+        function endGame(isWin = false) {
             gameState = 'GAMEOVER';
             SoundManager.stopBGM();
             cancelAnimationFrame(animationId);
             finalScoreEl.textContent = score;
             finalCorrectEl.textContent = correctCount; 
             questionTextEl.classList.add('hidden');
+            
+            // 根據是否勝利 (警車抓到搶匪) 修改遊戲結束的標題
+            const gameOverTitle = document.getElementById('game-over-title');
+            if (isWin) {
+                gameOverTitle.textContent = "🎉 成功逮捕搶匪！";
+                gameOverTitle.className = "text-4xl font-black mb-4 text-green-500";
+                SoundManager.playHeart(); 
+            } else {
+                gameOverTitle.textContent = "遊戲結束";
+                gameOverTitle.className = "text-4xl font-black mb-4 text-red-500";
+            }
+            
             gameOverMenu.classList.remove('hidden');
         }
 
