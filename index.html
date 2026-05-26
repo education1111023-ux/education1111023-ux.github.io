@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>課本習作字音字形與部首賽車遊戲</title>
+    <title>中文小遊戲</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
@@ -208,7 +208,7 @@
         <!-- 模式選擇主選單 -->
         <div id="mode-menu" class="menu-overlay">
             <div class="menu-card w-full max-w-md">
-                <h1 class="text-4xl font-black mb-6 text-blue-600">國語課本習作樂園</h1>
+                <h1 class="text-4xl font-black mb-6 text-blue-600">中文小遊戲</h1>
                 <p class="text-gray-600 mb-6 font-bold">請選擇你要挑戰的學習遊戲：</p>
                 <div class="flex flex-col gap-4 px-4">
                     <button class="btn bg-blue-500 py-5 text-xl shadow-lg flex flex-col items-center justify-center gap-1" onclick="showDifficultyMenu('phonics')">
@@ -222,7 +222,7 @@
                     
                     <!-- 載具座駕選擇按鈕 -->
                     <button class="btn bg-indigo-500 py-3 text-lg mt-2 shadow flex items-center justify-center gap-2" onclick="openVehicleMenu()">
-                        <span id="selected-vehicle-label">🚗 目前座駕: 紅跑車 🏎️</span>
+                        <span id="selected-vehicle-label">🚗 目前座駕: 紅跑車(速度2.5) 🏎️</span>
                     </button>
                 </div>
             </div>
@@ -231,8 +231,8 @@
         <!-- 載具座駕選擇選單 -->
         <div id="vehicle-menu" class="menu-overlay hidden">
             <div class="menu-card w-full max-w-lg">
-                <h2 class="text-3xl font-black mb-2 text-blue-600">🚗 選擇您的專屬座駕 🏎️</h2>
-                <p class="text-xs text-gray-500 mb-6">點擊下方的載具來更換您在遊戲中操控的賽車！</p>
+                <h2 class="text-3xl font-black mb-2 text-blue-600">選擇您的交通工具 🏎️</h2>
+                <p class="text-xs text-gray-500 mb-6">點擊下方的圖案來更換您在遊戲中操控的交通工具！</p>
                 
                 <!-- 載具卡片網格 -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
@@ -280,7 +280,7 @@
                                 <path d="M 100 110 L 103 118 L 111 118 L 105 123 L 107 131 L 100 126 L 93 131 L 95 123 L 89 118 L 97 118 Z" fill="#eab308"/>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚓 警車</div>
+                        <div class="font-black text-lg text-gray-800">🚓 警車(速度3.5)</div>
                     </div>
                     <!-- 黃計程車 -->
                     <div id="vc-taxi" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('taxi')">
@@ -311,7 +311,7 @@
                                 <text x="100" y="36" font-family="Nunito, sans-serif" font-weight="900" font-size="12" fill="#000" text-anchor="middle">TAXI</text>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚕 黃計程車</div>
+                        <div class="font-black text-lg text-gray-800">🚕 黃計程車(速度2.0)</div>
                     </div>
                     <!-- 腳踏車 -->
                     <div id="vc-bicycle" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('bicycle')">
@@ -343,7 +343,7 @@
                                 <rect x="96" y="38" width="8" height="6" fill="#fff" rx="1"/>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚲 腳踏車</div>
+                        <div class="font-black text-lg text-gray-800">🚲 腳踏車(沒有任何道具與炸彈，速度1.5)</div>
                     </div>
                 </div>
                 
@@ -358,12 +358,11 @@
                 <p class="text-xs text-gray-500 mb-4">請看上方題目，閃避障礙並選擇正確的字音字形！</p>
                 <h3 class="text-lg font-bold mb-3 text-gray-800">請選擇挑戰年級：</h3>
                 <div class="flex flex-col px-4 gap-1">
-                    <!-- 顏色由淺至深（淡綠、綠、黃、橘、紅）排列 -->
-                    <button class="btn bg-green-300 text-green-900" onclick="startGame('FIRST', 'phonics')">🟢 一年級</button>
-                    <button class="btn bg-green-600 text-white" onclick="startGame('SECOND', 'phonics')">🟢 二年級</button>
-                    <button class="btn bg-yellow-400 text-yellow-950" onclick="startGame('THIRD', 'phonics')">🟡 三年級</button>
-                    <button class="btn bg-orange-500 text-white" onclick="startGame('FOURTH', 'phonics')">🟠 四年級</button>
-                    <button class="btn bg-red-600 text-white" onclick="startGame('FIFTH', 'phonics')">🔴 五年級</button>
+                    <button class="btn bg-cyan-500 text-white" onclick="startGame('FIRST', 'phonics')">一年級</button>
+                    <button class="btn bg-green-500 text-white" onclick="startGame('SECOND', 'phonics')">二年級</button>
+                    <button class="btn bg-yellow-500 text-white" onclick="startGame('THIRD', 'phonics')">三年級</button>
+                    <button class="btn bg-orange-500 text-white" onclick="startGame('FOURTH', 'phonics')">四年級</button>
+                    <button class="btn bg-red-500 text-white" onclick="startGame('FIFTH', 'phonics')">五年級</button>
                     <button class="btn bg-gray-500 text-white mt-2 py-2 text-sm" onclick="backToModeMenu()">⬅️ 返回模式選擇</button>
                 </div>
             </div>
@@ -398,38 +397,222 @@
     </div>
 
     <script>
-        // ==========================================
-        // 🎵 簡化版音效管理器 (使用相容的純 Web Audio 合成)
-        // ==========================================
-        const SoundManager = {
-            playEngine() { this.playBeep(100, 'sawtooth', 0.3); },
-            playExplosion() { this.playBeep(200, 'sawtooth', 0.5); },
-            playCorrect() { this.playBeep(1000, 'sine', 0.1); setTimeout(()=>this.playBeep(1500, 'sine', 0.1), 100); },
-            playWrong() { this.playBeep(300, 'sawtooth', 0.3); },
-            playCoin() { this.playBeep(1200, 'sine', 0.1); },
-            playHeart() { this.playBeep(600, 'triangle', 0.1); setTimeout(()=>this.playBeep(800, 'triangle', 0.1), 100); },
-            startBGM() { /* 靜音版 BGM 確保環境穩定 */ },
-            stopBGM() { /* 靜音版 BGM 確保環境穩定 */ },
-            
-            // 通用發聲小幫手
-            playBeep(freq, type, duration) {
-                try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.type = type;
-                    osc.frequency.setValueAtTime(freq, ctx.currentTime);
-                    gain.gain.setValueAtTime(0.1, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-                    osc.start();
-                    osc.stop(ctx.currentTime + duration);
-                } catch(e) { console.log("Audio not supported or blocked"); }
-            }
-        };
+       // ==========================================
+
+        // 🎵 音效管理器 (Web Audio API 合成)
 
         // ==========================================
+
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        const SoundManager = {
+
+            isPlayingBGM: false,
+            bgmInterval: null,
+            nextNoteTime: 0,
+            noteIndex: 0,
+
+            init() {
+
+                if (!audioCtx) {
+                    audioCtx = new AudioContext();
+                }
+                if (audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            },
+
+
+            // 汽車變換車道的引擎加速聲
+
+            playEngine() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+
+
+                // 頻率從低音稍微滑高，產生 "Vroom" 的感覺
+
+                osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+                osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+
+
+                // 音量控制
+
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.3);
+
+            },
+
+
+
+            // 碰到炸彈的爆炸聲 (白噪音合成)
+
+            playExplosion() {
+                if (!audioCtx) return;
+                const bufferSize = audioCtx.sampleRate * 0.5; // 0.5秒
+                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = Math.random() * 2 - 1; // 產生白噪音
+                }
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = buffer;
+
+                // 使用低通濾波器讓聲音悶悶的，像真實爆炸
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+                filter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.5);
+                const gain = audioCtx.createGain();
+                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioCtx.destination);
+                noise.start();
+
+            },
+
+            // 答對的叮咚聲
+
+            playCorrect() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+
+                // 叮 (高音)
+
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
+
+                // 咚 (稍低音)
+                osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.15);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.17);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.4);
+            },
+
+            // 錯誤的提示聲 (低沉蜂鳴聲)
+
+            playWrong() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sawtooth';
+
+
+                // 較低、較沉的頻率
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.25);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.35);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.35);
+            },
+
+            // 金幣聲 (快速的高音爬升)
+
+            playCoin() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
+                gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
+                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08);
+                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.2);
+            },
+
+            // 吃到愛心的雀躍聲 (大調琶音，類似加一命)
+            playHeart() {
+                if (!audioCtx) return;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'triangle'; 
+                const now = audioCtx.currentTime;
+
+                // C5 -> E5 -> G5 -> C6 (雀躍的向上琶音)
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.08);
+                osc.frequency.setValueAtTime(783.99, now + 0.16);
+                osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                gain.gain.setValueAtTime(0, now);
+                gain.gain.linearRampToValueAtTime(0.3, now + 0.02);
+                gain.gain.setValueAtTime(0.3, now + 0.24);
+                gain.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            },
+
+            // 背景音樂 (8-bit 風格電子節奏)
+            startBGM() {
+                this.init();
+                if (this.isPlayingBGM) return;
+                this.isPlayingBGM = true;
+                this.nextNoteTime = audioCtx.currentTime + 0.1;
+                this.noteIndex = 0;
+                
+                // 簡單的動感貝斯循環音符頻率
+                const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61]; 
+                const playNote = (time, freq) => {
+                    if (!this.isPlayingBGM) return;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'square'; // 方波製造復古電子音效
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.02, time); // 音量放小，作為背景音樂
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start(time);
+                    osc.stop(time + 0.2);
+                };
+
+                // 持續調度音符
+                this.bgmInterval = setInterval(() => {
+                    if (!this.isPlayingBGM) return;
+                    while (this.nextNoteTime < audioCtx.currentTime + 0.1) {
+                        playNote(this.nextNoteTime, bassNotes[this.noteIndex % bassNotes.length]);
+                        this.nextNoteTime += 0.2; // 節奏速度
+                        this.noteIndex++;
+                    }
+                }, 50);
+            },
+            stopBGM() {
+                this.isPlayingBGM = false;
+                if (this.bgmInterval) {
+                    clearInterval(this.bgmInterval);
+                }
+            }
+        };
+       // ==========================================
         // 📚 題庫設定區 (自訂字音字形與部首題庫)
         // ==========================================
         const phonicsQuestionBanks = {
@@ -477,7 +660,7 @@
             FOURTH: {
                 "足「ㄐㄧ」": ["跡", "雞", "亦", "基"],
                 "「ㄇㄛˊ」樣": ["模", "膜", "莫", "摸"],
-                "傳「ㄕㄨ」": ["書", "輸", "舒", "紓"],
+                "傳「ㄕㄨ」": ["輸", "書", "舒", "紓"],
                 "「ㄐㄧㄢˋ」盤": ["鍵", "健", "毽", "建"],
                 "「ㄏㄨㄤ」張": ["慌", "謊", "荒", "黃"],
                 "「ㄏㄨㄤ」唐": ["荒", "謊", "晃", "慌"],
@@ -525,11 +708,11 @@
                 "言": ["論", "議", "評", "謝", "診", "討", "訴"],
                 "車": ["輕", "軍", "軟", "較", "輔", "輪", "軌"], 
                 "雨": ["雲", "需", "雷", "電", "霧", "雪", "零"],
-                "阜(left阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
+                "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
                 "貝": ["貼", "賞", "貢", "費", "財", "贏", "負"],
                 "馬": ["驚", "駝", "駱", "馴", "騎", "駕", "騰"], 
                 "宀": ["完", "家", "察", "寫", "室", "寶", "宣"],
-                "隹": ["隻", "雀", "雄", "雙", "雜"],
+                "隹": ["隻", "雀", "雄", "隼", "集", "雙", "雜"],
                 "疒": ["病", "疼", "痺", "疲", "痘", "癌", "痕"]
             },
             hard: {
@@ -544,18 +727,23 @@
                 "門": ["閃", "閉", "開", "閒", "關", "閣", "闊"],
                 "隹": ["隻", "雀", "雄", "雅", "集", "雙", "雜"],
                 "雨": ["雪", "雲", "零", "雷", "電", "需", "震"],
-                "豆": ["豐", "豈"],
-                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],
+                "豆": ["豐", "豈"],　
+                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],　
                 "糸": ["給", "綠", "紫", "糾", "繼", "絆"], 
-                "草（艸）": ["蒜", "藥", "蔥", "菓"], 
+                "草（艸）": ["蒜", "藥",　"蔥", "菓"], 
                 "月": ["有", "朋", "朔", "朗", "望"],
                 "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
-                "橫(right⻏)": ["部", "郭", "郵", "都", "鄉", "鄰", "郊"],
+                "邑(右⻏)": ["部", "郭", "郵", "都", "鄉", "鄰", "郊"],
                 "宀": ["寂", "寵", "察", "寫", "寡", "寶", "宣"],
                 "鬼": ["魅", "魔", "魂"]
             }
         };
 
+        let currentBank = {};
+        let questionKeys = [];
+        let currentDifficulty = 'FIRST';
+        let selectedMode = 'phonics'; // 'phonics' 或 'radical'
+        let lastQuestion = null; // 用於記憶上一題的題目名稱，防止連續重複出現
         // ==========================================
         // 🚗 載具座駕 SVG 暨屬性設定
         // ==========================================
