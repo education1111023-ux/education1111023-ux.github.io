@@ -186,26 +186,21 @@
 
     <div id="game-container">
         
-        <!-- UI 層 -->
         <div id="ui-layer">
             <div class="score-box" style="border-color: #3b82f6; color: #3b82f6;">得分: <span id="score">0</span></div>
             <div class="score-box" style="border-color: #10b981; color: #10b981;">答對: <span id="correct-count">0</span></div>
             <div class="score-box health-box">生命: <span id="lives">❤️❤️❤️</span></div>
         </div>
 
-        <!-- 題目區域 -->
         <div id="question-area">
             <div id="question-text" class="hidden">準備中...</div>
         </div>
 
-        <!-- 遊戲畫布 -->
         <canvas id="gameCanvas"></canvas>
 
-        <!-- 答題回饋 -->
         <div id="feedback-correct" class="feedback-text feedback-correct">答對了! 🌟</div>
         <div id="feedback-wrong" class="feedback-text feedback-wrong">哎呀! 💥</div>
 
-        <!-- 模式選擇主選單 -->
         <div id="mode-menu" class="menu-overlay">
             <div class="menu-card w-full max-w-md">
                 <h1 class="text-4xl font-black mb-6 text-blue-600">中文小遊戲</h1>
@@ -220,7 +215,6 @@
                         <span class="text-xs font-normal opacity-90">看題目，選出部首對應的正確字</span>
                     </button>
                     
-                    <!-- 載具座駕選擇按鈕 -->
                     <button class="btn bg-indigo-500 py-3 text-lg mt-2 shadow flex items-center justify-center gap-2" onclick="openVehicleMenu()">
                         <span id="selected-vehicle-label">🚗 目前座駕: 紅跑車(速度2.5) 🏎️</span>
                     </button>
@@ -228,15 +222,12 @@
             </div>
         </div>
 
-        <!-- 載具座駕選擇選單 -->
         <div id="vehicle-menu" class="menu-overlay hidden">
             <div class="menu-card w-full max-w-lg">
                 <h2 class="text-3xl font-black mb-2 text-blue-600">選擇您的交通工具 🏎️</h2>
                 <p class="text-xs text-gray-500 mb-6">點擊下方的圖案來更換您在遊戲中操控的交通工具！</p>
                 
-                <!-- 載具卡片網格 -->
                 <div class="grid grid-cols-2 gap-4 mb-6">
-                    <!-- 紅跑車 -->
                     <div id="vc-sports" class="vehicle-card border-4 border-blue-500 bg-blue-50 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('sports')">
                         <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center">
                             <svg class="w-full h-full" viewBox="0 0 200 200">
@@ -258,7 +249,6 @@
                         </div>
                         <div class="font-black text-lg text-gray-800">🏎️ 紅跑車(速度2.5)</div>
                     </div>
-                    <!-- 警車 -->
                     <div id="vc-police" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('police')">
                         <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center">
                             <svg class="w-full h-full" viewBox="0 0 200 200">
@@ -282,7 +272,6 @@
                         </div>
                         <div class="font-black text-lg text-gray-800">🚓 警車(追捕搶匪, 速度3.0)</div>
                     </div>
-                    <!-- 黃計程車 -->
                     <div id="vc-taxi" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('taxi')">
                         <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center">
                             <svg class="w-full h-full" viewBox="0 0 200 200">
@@ -311,12 +300,10 @@
                                 <text x="100" y="36" font-family="Nunito, sans-serif" font-weight="900" font-size="12" fill="#000" text-anchor="middle">TAXI</text>
                             </svg>
                         </div>
-                        <div class="font-black text-lg text-gray-800">🚕 黃計程車(速度3.0)</div>
+                        <div class="font-black text-lg text-gray-800">🚕 計程車(連對三題無敵，速度3.0)</div>
                     </div>
-                    <!-- 腳踏車 -->
                     <div id="vc-bicycle" class="vehicle-card border-4 border-gray-200 p-4 rounded-xl cursor-pointer transition transform hover:scale-105" onclick="selectVehicle('bicycle')">
                         <div class="w-24 h-24 mx-auto mb-2 flex items-center justify-center">
-                            <!-- 腳踏車 SVG：全新的 3D/寫實後方透視視角，呈現精細的車尾、擋泥板與踩踏姿態的人影背影 -->
                             <svg class="w-full h-full" viewBox="0 0 200 200">
                                 <ellipse cx="100" cy="165" rx="12" ry="28" fill="#111" stroke="#475569" stroke-width="3"/>
                                 <rect x="96" y="145" width="8" height="35" rx="4" fill="#64748b"/>
@@ -351,7 +338,6 @@
             </div>
         </div>
 
-        <!-- 字音字形難度選擇選單 -->
         <div id="phonics-menu" class="menu-overlay hidden">
             <div class="menu-card w-full max-w-md">
                 <h2 class="text-3xl font-black mb-2 text-orange-600">字音字形挑戰 🚗</h2>
@@ -368,7 +354,6 @@
             </div>
         </div>
 
-        <!-- 部首練習難度選擇選單 -->
         <div id="radical-menu" class="menu-overlay hidden">
             <div class="menu-card w-full max-w-md">
                 <h2 class="text-3xl font-black mb-2 text-emerald-600">部首挑戰 🔍</h2>
@@ -383,7 +368,6 @@
             </div>
         </div>
 
-        <!-- 遊戲結束選單 -->
         <div id="game-over-menu" class="menu-overlay hidden">
             <div class="menu-card">
                 <h1 id="game-over-title" class="text-4xl font-black mb-4 text-red-500">遊戲結束</h1>
@@ -398,223 +382,262 @@
 
     <script>
         // ==========================================
+        // 📊 全域變數統一宣告區 (避免 Duplicate Declaration 錯誤)
+        // ==========================================
+        let currentBank = {};
+        let questionKeys = [];
+        let currentDifficulty = 'FIRST';
+        let selectedMode = 'phonics'; 
+        let lastQuestion = null; 
+        let currentVehicle = 'sports'; 
+        let comboCorrect = 0; 
+        
+        let pedestrians = [];
+        let pedestrianSpawnTimer = 0;
+        let nitroActive = false;
+        let nitroEndTime = 0;
+        let preNitroSpeed = 0;
 
-        // 🎵 音效管理器 (Web Audio API 合成)
+        let canvasWidth, canvasHeight;
+        const laneCount = 3;
+        let laneWidth;
+        
+        let baseSpeed = 2.5; 
+        let currentSpeed = baseSpeed;
+        const speedIncrement = 0.25; 
+        const maxSpeed = 20; 
+
+        let traveledDistance = 0;       
+        let waveTriggerDistance = 0;          
+        let hasSpawnedItem = false;          
+        let hasSpawnedWord = false;            
+
+        let gameState = 'START'; 
+        let score = 0;
+        let correctCount = 0; 
+        let lives = 3;
+        const maxLives = 5;
+        let animationId;
+        
+        let items = []; 
+        let floatingTexts = []; 
+        let roadScrollOffset = 0; 
+        let chaseScore = 0;
 
         // ==========================================
+        // 🚗 載具座駕 SVG 暨屬性設定
+        // ==========================================
+        const VEHICLE_PRESETS = {
+            sports: {
+                name: "紅跑車", emoji: "🏎️", baseSpeed: 2.5,
+                svg: `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
+                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
+                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
+                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
+                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#ff0000"/>
+                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#4d4d4d" stroke="#333" stroke-width="4"/>
+                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
+                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
+                  <rect x="65" y="100" width="70" height="10" fill="#a01d1d"/>
+                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#2c2c2c"/>
+                  <circle cx="50" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
+                  <circle cx="150" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
+                  <rect x="30" y="125" width="15" height="4" fill="#000"/>
+                  <rect x="155" y="125" width="15" height="4" fill="#000"/>
+                </svg>`
+            },
+            police: {
+                name: "警車", emoji: "🚓", baseSpeed: 3.0,
+                svg: `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
+                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
+                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#0f172a"/>
+                  <path d="M 50 40 L 150 40 L 155 80 L 170 100 L 170 145 L 30 145 L 30 100 L 45 80 Z" fill="#f8fafc"/>
+                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
+                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
+                  <rect x="65" y="100" width="70" height="10" fill="#475569"/>
+                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#0f172a"/>
+                  <rect x="70" y="25" width="60" height="15" rx="5" fill="#334155"/>
+                  <rect x="72" y="27" width="26" height="11" rx="3" fill="#ef4444"/>
+                  <rect x="102" y="27" width="26" height="11" rx="3" fill="#3b82f6"/>
+                  <rect x="98" y="25" width="4" height="15" fill="#e2e8f0"/>
+                  <path d="M 100 110 L 103 118 L 111 118 L 105 123 L 107 131 L 100 126 L 93 131 L 95 123 L 89 118 L 97 118 Z" fill="#eab308"/>
+                </svg>`
+            },
+            taxi: {
+                name: "黃計程車", emoji: "🚕", baseSpeed: 3.0,
+                svg: `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
+                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
+                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#ca8a04" stroke="#854d0e" stroke-width="2"/>
+                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#ca8a04" stroke="#854d0e" stroke-width="2"/>
+                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#facc15"/>
+                  <rect x="20" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="50" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="80" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="110" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="140" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="170" y="110" width="15" height="15" fill="#000"/>
+                  <rect x="35" y="110" width="15" height="15" fill="#fff"/>
+                  <rect x="65" y="110" width="15" height="15" fill="#fff"/>
+                  <rect x="95" y="110" width="15" height="15" fill="#fff"/>
+                  <rect x="125" y="110" width="15" height="15" fill="#fff"/>
+                  <rect x="155" y="110" width="15" height="15" fill="#fff"/>
+                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
+                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                  <rect x="65" y="100" width="70" height="10" fill="#78350f"/>
+                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#1e293b"/>
+                  <polygon points="75,25 125,25 115,40 85,40" fill="#fff" stroke="#000" stroke-width="2"/>
+                  <text x="100" y="36" font-family="Nunito, sans-serif" font-weight="900" font-size="12" fill="#000" text-anchor="middle">TAXI</text>
+                </svg>`
+            },
+            bicycle: {
+                name: "腳踏車", emoji: "🚲", baseSpeed: 1.5,
+                svg: `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                  <ellipse cx="100" cy="165" rx="12" ry="28" fill="#111" stroke="#475569" stroke-width="3"/>
+                  <rect x="96" y="145" width="8" height="35" rx="4" fill="#64748b"/>
+                  <line x1="75" y1="145" x2="125" y2="145" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
+                  <rect x="65" y="140" width="12" height="10" rx="2" fill="#1e293b"/>
+                  <rect x="123" y="140" width="12" height="10" rx="2" fill="#1e293b"/>
+                  <line x1="100" y1="165" x2="100" y2="115" stroke="#64748b" stroke-width="8"/>
+                  <path d="M 80 115 Q 100 110 120 115 Q 100 125 80 115" fill="#222"/>
+                  <ellipse cx="100" cy="110" rx="24" ry="16" fill="#2563eb"/>
+                  <path d="M 82 112 Q 65 125 72 142" stroke="#2563eb" stroke-width="12" stroke-linecap="round" fill="none"/>
+                  <path d="M 72 142 L 72 146" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+                  <path d="M 118 112 Q 135 125 128 142" stroke="#2563eb" stroke-width="12" stroke-linecap="round" fill="none"/>
+                  <path d="M 128 142 L 128 146" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
+                  <rect x="94" y="65" width="12" height="10" fill="#fed7aa"/>
+                  <path d="M 75 75 Q 100 70 125 75 L 120 110 Q 100 114 80 110 Z" fill="#ea580c"/>
+                  <rect x="88" y="85" width="24" height="6" fill="#e2e8f0" rx="1"/>
+                  <path d="M 50 62 Q 100 55 150 62" stroke="#475569" stroke-width="8" stroke-linecap="round" fill="none"/>
+                  <rect x="45" y="58" width="10" height="8" rx="2" fill="#111"/>
+                  <rect x="145" y="58" width="10" height="8" rx="2" fill="#111"/>
+                  <path d="M 78 78 Q 55 65 52 62" stroke="#ea580c" stroke-width="10" stroke-linecap="round" fill="none"/>
+                  <path d="M 122 78 Q 145 65 148 62" stroke="#ea580c" stroke-width="10" stroke-linecap="round" fill="none"/>
+                  <circle cx="100" cy="58" r="14" fill="#fed7aa"/>
+                  <path d="M 84 54 Q 100 34 116 54 Q 100 58 84 54" fill="#3b82f6"/>
+                  <rect x="96" y="38" width="8" height="6" fill="#fff" rx="1"/>
+                </svg>`
+            }
+        };
 
+        // ==========================================
+        // 🎵 音效管理器 (Web Audio API 合成)
+        // ==========================================
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
         const SoundManager = {
-
             isPlayingBGM: false,
             bgmInterval: null,
             nextNoteTime: 0,
             noteIndex: 0,
+            bgmSpeedMultiplier: 1,
 
             init() {
-
-                if (!audioCtx) {
-                    audioCtx = new AudioContext();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
             },
-
-
-            // 汽車變換車道的引擎加速聲
 
             playEngine() {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-
-
-                // 頻率從低音稍微滑高，產生 "Vroom" 的感覺
-
-                osc.frequency.setValueAtTime(60, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1);
-                osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
-
-
-                // 音量控制
-
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.3);
-
+                osc.frequency.setValueAtTime(60, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1); osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.3);
             },
-
-
-
-            // 碰到炸彈的爆炸聲 (白噪音合成)
 
             playExplosion() {
                 if (!audioCtx) return;
-                const bufferSize = audioCtx.sampleRate * 0.5; // 0.5秒
-                const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                const bufferSize = audioCtx.sampleRate * 0.5; const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1; // 產生白噪音
-                }
-                const noise = audioCtx.createBufferSource();
-                noise.buffer = buffer;
-
-                // 使用低通濾波器讓聲音悶悶的，像真實爆炸
-
-                const filter = audioCtx.createBiquadFilter();
-                filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-                filter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.5);
-                const gain = audioCtx.createGain();
-                gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-                noise.connect(filter);
-                filter.connect(gain);
-                gain.connect(audioCtx.destination);
-                noise.start();
-
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1; 
+                const noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+                const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.setValueAtTime(1000, audioCtx.currentTime); filter.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.5);
+                const gain = audioCtx.createGain(); gain.gain.setValueAtTime(0.5, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+                noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination); noise.start();
             },
-
-            // 答對的叮咚聲
 
             playCorrect() {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'sine';
-
-                // 叮 (高音)
-
-                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime);
-
-                // 咚 (稍低音)
-                osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
-                gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.15);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.17);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.4);
+                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime); osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02); gain.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.15); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.17); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.4);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.4);
             },
-
-            // 錯誤的提示聲 (低沉蜂鳴聲)
 
             playWrong() {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'sawtooth';
-
-
-                // 較低、較沉的頻率
-                osc.frequency.setValueAtTime(150, audioCtx.currentTime);
-                osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.25);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.35);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.35);
+                osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
+                gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.25); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.35);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.35);
             },
-
-            // 金幣聲 (快速的高音爬升)
 
             playCoin() {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'sine';
-                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); // B5
-                osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); // E6
-                gain.gain.setValueAtTime(0, audioCtx.currentTime);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02);
-                gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08);
-                gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.2);
+                osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08); 
+                gain.gain.setValueAtTime(0, audioCtx.currentTime); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.02); gain.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.08); gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.2);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(); osc.stop(audioCtx.currentTime + 0.2);
             },
 
-            // 吃到愛心的雀躍聲 (大調琶音，類似加一命)
             playHeart() {
                 if (!audioCtx) return;
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = 'triangle'; 
-                const now = audioCtx.currentTime;
-
-                // C5 -> E5 -> G5 -> C6 (雀躍的向上琶音)
-                osc.frequency.setValueAtTime(523.25, now);
-                osc.frequency.setValueAtTime(659.25, now + 0.08);
-                osc.frequency.setValueAtTime(783.99, now + 0.16);
-                osc.frequency.setValueAtTime(1046.50, now + 0.24);
-                gain.gain.setValueAtTime(0, now);
-                gain.gain.linearRampToValueAtTime(0.3, now + 0.02);
-                gain.gain.setValueAtTime(0.3, now + 0.24);
-                gain.gain.linearRampToValueAtTime(0, now + 0.4);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start(now);
-                osc.stop(now + 0.4);
+                const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                osc.type = 'triangle'; const now = audioCtx.currentTime;
+                osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.08); osc.frequency.setValueAtTime(783.99, now + 0.16); osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                gain.gain.setValueAtTime(0, now); gain.gain.linearRampToValueAtTime(0.3, now + 0.02); gain.gain.setValueAtTime(0.3, now + 0.24); gain.gain.linearRampToValueAtTime(0, now + 0.4);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.4);
             },
 
-            // 背景音樂 (8-bit 風格電子節奏)
             startBGM() {
                 this.init();
                 if (this.isPlayingBGM) return;
-                this.isPlayingBGM = true;
-                this.nextNoteTime = audioCtx.currentTime + 0.1;
-                this.noteIndex = 0;
-                
-                // 簡單的動感貝斯循環音符頻率
+                this.isPlayingBGM = true; this.nextNoteTime = audioCtx.currentTime + 0.1; this.noteIndex = 0;
                 const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61]; 
                 const playNote = (time, freq) => {
                     if (!this.isPlayingBGM) return;
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'square'; // 方波製造復古電子音效
-                    osc.frequency.value = freq;
-                    gain.gain.setValueAtTime(0.02, time); // 音量放小，作為背景音樂
-                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(time);
-                    osc.stop(time + 0.2);
+                    const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+                    osc.type = 'square'; osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.02, time); gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(time); osc.stop(time + 0.2);
                 };
-
-                // 持續調度音符
                 this.bgmInterval = setInterval(() => {
                     if (!this.isPlayingBGM) return;
                     while (this.nextNoteTime < audioCtx.currentTime + 0.1) {
                         playNote(this.nextNoteTime, bassNotes[this.noteIndex % bassNotes.length]);
-                        this.nextNoteTime += 0.2; // 節奏速度
+                        this.nextNoteTime += 0.2 / this.bgmSpeedMultiplier; 
                         this.noteIndex++;
                     }
                 }, 50);
             },
             stopBGM() {
                 this.isPlayingBGM = false;
-                if (this.bgmInterval) {
-                    clearInterval(this.bgmInterval);
-                }
+                if (this.bgmInterval) clearInterval(this.bgmInterval);
             }
         };
 
         // ==========================================
-        // 📚 題庫設定區 (自訂字音字形與部首題庫)
+        // 📚 題庫設定區
         // ==========================================
         const phonicsQuestionBanks = {
             FIRST: {
@@ -713,7 +736,7 @@
                 "貝": ["貼", "賞", "貢", "費", "財", "贏", "負"],
                 "馬": ["驚", "駝", "駱", "馴", "騎", "駕", "騰"], 
                 "宀": ["完", "家", "察", "寫", "室", "寶", "宣"],
-                "隹": ["隻", "雀", "雄", "隼", "集", "雙", "雜"],
+                "隹": ["隻", "雀", "雄", "雅", "集", "雙", "雜"],
                 "疒": ["病", "疼", "痺", "疲", "痘", "癌", "痕"]
             },
             hard: {
@@ -728,10 +751,10 @@
                 "門": ["閃", "閉", "開", "閒", "關", "閣", "闊"],
                 "隹": ["隻", "雀", "雄", "雅", "集", "雙", "雜"],
                 "雨": ["雪", "雲", "零", "雷", "電", "需", "震"],
-                "豆": ["豐", "豈"],　
-                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],　
+                "豆": ["豐", "豈"],
+                "肉（⺼）": ["臟", "肥", "肩", "肖", "肌"],
                 "糸": ["給", "綠", "紫", "糾", "繼", "絆"], 
-                "草（艸）": ["蒜", "藥",　"蔥", "菓"], 
+                "草（艸）": ["蒜", "藥", "蔥", "菓"], 
                 "月": ["有", "朋", "朔", "朗", "望"],
                 "阜(左阝)": ["陽", "陣", "陳", "階", "院", "降", "除"], 
                 "邑(右⻏)": ["部", "郭", "郵", "都", "鄉", "鄰", "郊"],
@@ -739,159 +762,15 @@
                 "鬼": ["魅", "魔", "魂"]
             }
         };
-        // ==========================================
-        // 📊 全域狀態變數
-        // ==========================================
-        let currentBank = {};
-        let questionKeys = [];
-        let currentDifficulty = 'FIRST';
-        let selectedMode = 'phonics'; 
-        let lastQuestion = null; 
-        let currentVehicle = 'sports'; 
 
         // ==========================================
-        // 🚗 載具座駕 SVG 暨屬性設定
-        // ==========================================
-        const VEHICLE_PRESETS = {
-            sports: {
-                name: "紅跑車",
-                emoji: "🏎️",
-                baseSpeed: 2.5,
-                svg: `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
-                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
-                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
-                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#e0e0e0" stroke="#333" stroke-width="2"/>
-                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#ff0000"/>
-                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#4d4d4d" stroke="#333" stroke-width="4"/>
-                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
-                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#cc1414" stroke="#8a1414" stroke-width="2"/>
-                  <rect x="65" y="100" width="70" height="10" fill="#a01d1d"/>
-                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#2c2c2c"/>
-                  <circle cx="50" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
-                  <circle cx="150" cy="152" r="9" fill="#cccccc" stroke="#666" stroke-width="2"/>
-                  <rect x="30" y="125" width="15" height="4" fill="#000"/>
-                  <rect x="155" y="125" width="15" height="4" fill="#000"/>
-                </svg>
-                `
-            },
-            police: {
-                name: "警車",
-                emoji: "🚓",
-                baseSpeed: 3.0,
-                svg: `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
-                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
-                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
-                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
-                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#0f172a"/>
-                  <path d="M 50 40 L 150 40 L 155 80 L 170 100 L 170 145 L 30 145 L 30 100 L 45 80 Z" fill="#f8fafc"/>
-                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
-                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
-                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#38bdf8" stroke="#0284c7" stroke-width="2"/>
-                  <rect x="65" y="100" width="70" height="10" fill="#475569"/>
-                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#0f172a"/>
-                  <rect x="70" y="25" width="60" height="15" rx="5" fill="#334155"/>
-                  <rect x="72" y="27" width="26" height="11" rx="3" fill="#ef4444"/>
-                  <rect x="102" y="27" width="26" height="11" rx="3" fill="#3b82f6"/>
-                  <rect x="98" y="25" width="4" height="15" fill="#e2e8f0"/>
-                  <path d="M 100 110 L 103 118 L 111 118 L 105 123 L 107 131 L 100 126 L 93 131 L 95 123 L 89 118 L 97 118 Z" fill="#eab308"/>
-                </svg>
-                `
-            },
-            taxi: {
-                name: "黃計程車",
-                emoji: "🚕",
-                baseSpeed: 3.0,
-                svg: `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                  <path d="M 35 150 L 55 150 L 55 180 L 35 180 Z" fill="#222"/>
-                  <path d="M 145 150 L 165 150 L 165 180 L 145 180 Z" fill="#222"/>
-                  <path d="M 15 85 C 10 85 10 95 15 100 L 30 100 L 35 85 Z" fill="#ca8a04" stroke="#854d0e" stroke-width="2"/>
-                  <path d="M 185 85 C 190 85 190 95 185 100 L 170 100 L 165 85 Z" fill="#ca8a04" stroke="#854d0e" stroke-width="2"/>
-                  <path d="M 45 40 L 155 40 L 165 80 L 185 100 L 185 150 C 185 160 175 165 165 165 L 35 165 C 25 165 15 160 15 150 L 15 100 L 35 80 Z" fill="#facc15"/>
-                  <rect x="20" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="50" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="80" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="110" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="140" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="170" y="110" width="15" height="15" fill="#000"/>
-                  <rect x="35" y="110" width="15" height="15" fill="#fff"/>
-                  <rect x="65" y="110" width="15" height="15" fill="#fff"/>
-                  <rect x="95" y="110" width="15" height="15" fill="#fff"/>
-                  <rect x="125" y="110" width="15" height="15" fill="#fff"/>
-                  <rect x="155" y="110" width="15" height="15" fill="#fff"/>
-                  <path d="M 55 45 L 145 45 L 155 75 L 45 75 Z" fill="#1e293b" stroke="#0f172a" stroke-width="4"/>
-                  <path d="M 20 95 L 65 95 L 70 115 L 20 110 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
-                  <path d="M 180 95 L 135 95 L 130 115 L 180 110 Z" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
-                  <rect x="65" y="100" width="70" height="10" fill="#78350f"/>
-                  <path d="M 20 140 L 180 140 L 175 165 L 25 165 Z" fill="#1e293b"/>
-                  <polygon points="75,25 125,25 115,40 85,40" fill="#fff" stroke="#000" stroke-width="2"/>
-                  <text x="100" y="36" font-family="Nunito, sans-serif" font-weight="900" font-size="12" fill="#000" text-anchor="middle">TAXI</text>
-                </svg>
-                `
-            },
-            bicycle: {
-                name: "腳踏車",
-                emoji: "🚲",
-                baseSpeed: 1.5,
-                svg: `
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
-                  <ellipse cx="100" cy="165" rx="12" ry="28" fill="#111" stroke="#475569" stroke-width="3"/>
-                  <rect x="96" y="145" width="8" height="35" rx="4" fill="#64748b"/>
-                  <line x1="75" y1="145" x2="125" y2="145" stroke="#334155" stroke-width="6" stroke-linecap="round"/>
-                  <rect x="65" y="140" width="12" height="10" rx="2" fill="#1e293b"/>
-                  <rect x="123" y="140" width="12" height="10" rx="2" fill="#1e293b"/>
-                  <line x1="100" y1="165" x2="100" y2="115" stroke="#64748b" stroke-width="8"/>
-                  <path d="M 80 115 Q 100 110 120 115 Q 100 125 80 115" fill="#222"/>
-                  <ellipse cx="100" cy="110" rx="24" ry="16" fill="#2563eb"/>
-                  <path d="M 82 112 Q 65 125 72 142" stroke="#2563eb" stroke-width="12" stroke-linecap="round" fill="none"/>
-                  <path d="M 72 142 L 72 146" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
-                  <path d="M 118 112 Q 135 125 128 142" stroke="#2563eb" stroke-width="12" stroke-linecap="round" fill="none"/>
-                  <path d="M 128 142 L 128 146" stroke="#1e293b" stroke-width="8" stroke-linecap="round"/>
-                  <rect x="94" y="65" width="12" height="10" fill="#fed7aa"/>
-                  <path d="M 75 75 Q 100 70 125 75 L 120 110 Q 100 114 80 110 Z" fill="#ea580c"/>
-                  <rect x="88" y="85" width="24" height="6" fill="#e2e8f0" rx="1"/>
-                  <path d="M 50 62 Q 100 55 150 62" stroke="#475569" stroke-width="8" stroke-linecap="round" fill="none"/>
-                  <rect x="45" y="58" width="10" height="8" rx="2" fill="#111"/>
-                  <rect x="145" y="58" width="10" height="8" rx="2" fill="#111"/>
-                  <path d="M 78 78 Q 55 65 52 62" stroke="#ea580c" stroke-width="10" stroke-linecap="round" fill="none"/>
-                  <path d="M 122 78 Q 145 65 148 62" stroke="#ea580c" stroke-width="10" stroke-linecap="round" fill="none"/>
-                  <circle cx="100" cy="58" r="14" fill="#fed7aa"/>
-                  <path d="M 84 54 Q 100 34 116 54 Q 100 58 84 54" fill="#3b82f6"/>
-                  <rect x="96" y="38" width="8" height="6" fill="#fff" rx="1"/>
-                </svg>
-                `
-            }
-        };
-
-        // ==========================================
-        // 🎮 遊戲核心邏輯區
+        // 🎮 遊戲核心邏輯與 DOM 獲取
         // ==========================================
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
-        // 載入當前載具的 SVG 圖片
         const carImage = new Image();
-        carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS[currentVehicle].svg);
-
-        // 搶匪車圖片與狀態設定
         const robberImage = new Image();
-        robberImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS['sports'].svg);
-
-        let robberCar = {
-            active: false,
-            y: 50,
-            targetY: 50,
-            currentX: 0,
-            lane: 1,
-            targetLane: 1,
-            width: 100,
-            height: 100,
-            laneChangeTimer: 0
-        };
 
         const scoreEl = document.getElementById('score');
         const correctCountEl = document.getElementById('correct-count');
@@ -904,40 +783,12 @@
         const feedbackCorrect = document.getElementById('feedback-correct');
         const feedbackWrong = document.getElementById('feedback-wrong');
 
-        let canvasWidth, canvasHeight;
-        const laneCount = 3;
-        let laneWidth;
-        
-        let baseSpeed = 2.5; 
-        let currentSpeed = baseSpeed;
-        const speedIncrement = 0.25; 
-        const maxSpeed = 20; 
-
-        let traveledDistance = 0;       
-        let waveTriggerDistance = 0;          
-        let hasSpawnedItem = false;          
-        let hasSpawnedWord = false;            
-
-        let gameState = 'START'; 
-        let score = 0;
-        let correctCount = 0; 
-        let lives = 3;
-        const maxLives = 5;
-        let animationId;
-        
-        let items = []; 
-        let floatingTexts = []; 
-        let roadScrollOffset = 0; 
-        let chaseScore = 0; // 新增：用於記錄警車追捕進度
+        let robberCar = {
+            active: false, y: 50, targetY: 50, currentX: 0, lane: 1, targetLane: 1, width: 100, height: 100, laneChangeTimer: 0
+        };
 
         const player = {
-            lane: 1, 
-            targetLane: 1,
-            y: 0, 
-            width: 100, 
-            height: 100, 
-            moveSpeed: 0.15, 
-            currentX: 0
+            lane: 1, targetLane: 1, y: 0, width: 100, height: 100, moveSpeed: 0.15, currentX: 0
         };
 
         function resizeCanvas() {
@@ -947,7 +798,6 @@
             canvas.height = canvasHeight;
             
             laneWidth = canvasWidth / laneCount;
-            
             player.y = canvasHeight - 140;
             player.currentX = (player.lane * laneWidth) + (laneWidth / 2);
         }
@@ -958,26 +808,19 @@
         function moveLeft() {
             const prevTarget = player.targetLane;
             if (player.targetLane > 0) player.targetLane--;
-            if (prevTarget !== player.targetLane) {
-                SoundManager.playEngine();
-            }
+            if (prevTarget !== player.targetLane) SoundManager.playEngine();
         }
 
         function moveRight() {
             const prevTarget = player.targetLane;
             if (player.targetLane < laneCount - 1) player.targetLane++;
-            if (prevTarget !== player.targetLane) {
-                SoundManager.playEngine();
-            }
+            if (prevTarget !== player.targetLane) SoundManager.playEngine();
         }
 
         function handleInput(xPos) {
             if (gameState !== 'PLAYING') return;
-            if (xPos < canvasWidth / 2) {
-                moveLeft();
-            } else {
-                moveRight();
-            }
+            if (xPos < canvasWidth / 2) moveLeft();
+            else moveRight();
         }
 
         canvas.addEventListener('mousedown', (e) => {
@@ -985,9 +828,7 @@
             handleInput(e.clientX);
         });
 
-        let touchStartX = 0;
-        let touchStartY = 0;
-        let touchStartTime = 0;
+        let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
 
         canvas.addEventListener('touchstart', (e) => {
             if (gameState !== 'PLAYING') return;
@@ -1008,20 +849,15 @@
             if (gameState !== 'PLAYING') return;
             e.preventDefault();
             if (e.changedTouches.length > 0) {
-                const touchEndX = e.changedTouches[0].clientX;
-                const touchEndY = e.changedTouches[0].clientY;
-                const dx = touchEndX - touchStartX;
-                const dy = touchEndY - touchStartY;
+                const dx = e.changedTouches[0].clientX - touchStartX;
+                const dy = e.changedTouches[0].clientY - touchStartY;
                 const dt = Date.now() - touchStartTime;
 
                 if (Math.abs(dx) > 30 && Math.abs(dx) > Math.abs(dy)) {
-                    if (dx > 0) {
-                        moveRight();
-                    } else {
-                        moveLeft();
-                    }
+                    if (dx > 0) moveRight();
+                    else moveLeft();
                 } else if (Math.abs(dx) < 15 && Math.abs(dy) < 15 && dt < 300) {
-                    handleInput(touchEndX);
+                    handleInput(e.changedTouches[0].clientX);
                 }
             }
         }, { passive: false });
@@ -1066,33 +902,160 @@
         }
 
         // ==========================================
-        // 🚨 搶匪車動畫邏輯 (僅警車模式觸發)
+        // 🚶 行人邏輯 (計程車模式專屬) - 已降機率並改用 emoji
+        // ==========================================
+        function spawnPedestrian() {
+            const side = Math.random() < 0.5 ? 'left' : 'right';
+            const emojis = ['🏃‍♂️', '🏃‍♀️', '🏃'];
+            pedestrians.push({
+                x: side === 'left' ? -40 : canvasWidth + 40,
+                y: -50,
+                width: 40,
+                height: 40,
+                speed: 1.5 + Math.random() * 2,
+                direction: side === 'left' ? 1 : -1,
+                emoji: emojis[Math.floor(Math.random() * emojis.length)],
+                bouncing: false,
+                vx: 0,
+                vy: 0,
+                rotation: 0
+            });
+        }
+
+        function updatePedestrians() {
+            if (currentVehicle !== 'taxi') return;
+
+            pedestrianSpawnTimer++;
+            // 【大幅降低行人出現頻率】：拉長等待週期且只有 30% 機率生成
+            if (pedestrianSpawnTimer > 180) { 
+                pedestrianSpawnTimer = 0;
+                if (Math.random() < 0.6) spawnPedestrian(); 
+            }
+
+            for (let i = pedestrians.length - 1; i >= 0; i--) {
+                const p = pedestrians[i];
+                
+                if (p.bouncing) {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.8; // 重力
+                    p.rotation += 0.2; // 旋轉
+                } else {
+                    p.x += p.speed * p.direction;
+                    p.y += currentSpeed; 
+                }
+
+                if (p.x < -100 || p.x > canvasWidth + 100 || p.y > canvasHeight + 100 || p.y < -100) {
+                    pedestrians.splice(i, 1);
+                    continue;
+                }
+
+                const pLeft = player.currentX - player.width / 2;
+                const pRight = player.currentX + player.width / 2;
+                const pTop = player.y - player.height / 2;
+                const pBottom = player.y + player.height / 2;
+
+                if (!p.bouncing &&
+                    pLeft < p.x + p.width &&
+                    pRight > p.x - p.width &&
+                    pTop < p.y + p.height &&
+                    pBottom > p.y - p.height) {
+                    
+                    if (nitroActive) {
+                        p.bouncing = true;
+                        p.vx = p.direction * 15; // 彈飛特效
+                        p.vy = -15;
+                        showMiniFeedback('🛡️ 撞飛!', p.x, p.y, '#3b82f6');
+                    } else {
+                        lives--;
+                        updateLivesDisplay();
+                        SoundManager.playExplosion();
+                        showFeedback(feedbackWrong);
+                        showMiniFeedback('💥 撞到行人', p.x, p.y, '#ef4444');
+                        comboCorrect = 0; 
+                        pedestrians.splice(i, 1);
+                        if (lives <= 0) endGame(false);
+                    }
+                }
+            }
+        }
+
+        function drawPedestrians() {
+            if (currentVehicle !== 'taxi') return;
+            pedestrians.forEach(p => {
+                ctx.save();
+                ctx.translate(p.x, p.y);
+                if (p.bouncing) {
+                    ctx.rotate(p.rotation);
+                } else if (p.direction === 1) {
+                    ctx.scale(-1, 1); // 如果往右走，翻轉 emoji 讓他面向右邊
+                }
+                ctx.font = '60px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(p.emoji, 0, 0);
+                ctx.restore();
+            });
+        }
+
+        // ==========================================
+        // 🚀 氮氣系統邏輯 (計程車模式專屬)
+        // ==========================================
+        function activateNitro() {
+            if (!nitroActive) {
+                preNitroSpeed = currentSpeed;
+                currentSpeed = preNitroSpeed * 2.5; // 加速
+            }
+            nitroActive = true;
+            nitroEndTime = Date.now() + 3000; // 無敵 3 秒
+            SoundManager.bgmSpeedMultiplier = 1.5; // 音樂加速
+            showMiniFeedback('🚀 氮氣無敵!', player.currentX, player.y - 80, '#3b82f6');
+        }
+
+        function drawNitroEffects() {
+            if (!nitroActive) return;
+            
+            // 繪製流星線
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let i = 0; i < 10; i++) {
+                let x = Math.random() * canvasWidth;
+                let y = Math.random() * canvasHeight;
+                ctx.moveTo(x, y);
+                ctx.lineTo(x, y + 50 + Math.random() * 50);
+            }
+            ctx.stroke();
+            
+            // 繪製無敵護盾
+            ctx.beginPath();
+            ctx.arc(player.currentX, player.y, 70, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(59, 130, 246, ${0.5 + Math.sin(Date.now() / 100) * 0.5})`;
+            ctx.lineWidth = 6;
+            ctx.stroke();
+        }
+
+        // ==========================================
+        // 🚨 搶匪車動畫邏輯 (僅警車模式)
         // ==========================================
         function updateRobberCar() {
             if (!robberCar.active) return;
-            
-            // 追捕進度：小於 3 題時隱藏在畫面外，3題之後依據 chaseScore 計算距離
             if (chaseScore < 3) {
-                robberCar.targetY = -300; // 在畫面外
+                robberCar.targetY = -300; 
             } else {
-                // 從第 3 題到第 20 題，進度從 0 到 100%
                 let progress = Math.min((chaseScore - 3) / 17, 1);
                 let startY = 80;
-                let endY = player.y - 120; // 追上時在玩家車頭前方
+                let endY = player.y - 120;
                 robberCar.targetY = startY + (endY - startY) * progress;
             }
             
-            // 平滑追趕動畫
             robberCar.y += (robberCar.targetY - robberCar.y) * 0.05;
-            
-            // 搶匪不時變換車道蛇行
             robberCar.laneChangeTimer++;
             if (robberCar.laneChangeTimer > 150) { 
                 let possibleLanes = [0, 1, 2].filter(l => l !== robberCar.targetLane);
                 robberCar.targetLane = possibleLanes[Math.floor(Math.random() * possibleLanes.length)];
                 robberCar.laneChangeTimer = 0;
             }
-            
             const targetX = (robberCar.targetLane * laneWidth) + (laneWidth / 2);
             robberCar.currentX += (targetX - robberCar.currentX) * 0.05;
         }
@@ -1101,16 +1064,7 @@
             if (!robberCar.active) return;
             const bounce = Math.random() * 1.5; 
             if (robberImage.complete) {
-                // 畫搶匪車
-                ctx.drawImage(
-                    robberImage, 
-                    robberCar.currentX - robberCar.width / 2, 
-                    robberCar.y - robberCar.height / 2 + bounce, 
-                    robberCar.width, 
-                    robberCar.height
-                );
-                
-                // 畫紅色警示光環 (底盤燈效果)
+                ctx.drawImage(robberImage, robberCar.currentX - robberCar.width / 2, robberCar.y - robberCar.height / 2 + bounce, robberCar.width, robberCar.height);
                 ctx.save();
                 ctx.shadowBlur = 30;
                 ctx.shadowColor = "red";
@@ -1124,7 +1078,6 @@
 
         function generateQuestion() {
             if (questionKeys.length === 0) return;
-            
             let nextQuestion;
             if (questionKeys.length > 1) {
                 do {
@@ -1138,11 +1091,9 @@
             currentQuestion = nextQuestion;
             lastQuestion = currentQuestion;
             
-            if (selectedMode === 'radical') {
-                questionTextEl.textContent = `請問哪個字的部首是「${currentQuestion}」部？`;
-            } else {
-                questionTextEl.textContent = currentQuestion;
-            }
+            if (selectedMode === 'radical') questionTextEl.textContent = `請問哪個字的部首是「${currentQuestion}」部？`;
+            else questionTextEl.textContent = currentQuestion;
+            
             questionTextEl.classList.remove('hidden');
         }
 
@@ -1154,15 +1105,12 @@
             return array;
         }
 
-        function openVehicleMenu() {
-            document.getElementById('mode-menu').classList.add('hidden');
-            document.getElementById('vehicle-menu').classList.remove('hidden');
-        }
-
+        // ==========================================
+        // UI & 類別邏輯
+        // ==========================================
+        function openVehicleMenu() { document.getElementById('mode-menu').classList.add('hidden'); document.getElementById('vehicle-menu').classList.remove('hidden'); }
         function closeVehicleMenu() {
-            document.getElementById('vehicle-menu').classList.add('hidden');
-            document.getElementById('mode-menu').classList.remove('hidden');
-            
+            document.getElementById('vehicle-menu').classList.add('hidden'); document.getElementById('mode-menu').classList.remove('hidden');
             const label = document.getElementById('selected-vehicle-label');
             if (label) {
                 let extraText = currentVehicle === "police" ? "追捕搶匪, " : (currentVehicle === "bicycle" ? "無道具干擾, " : "");
@@ -1172,10 +1120,8 @@
 
         function selectVehicle(key) {
             currentVehicle = key;
-            
             const svgCode = VEHICLE_PRESETS[key].svg;
             carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgCode);
-            
             document.querySelectorAll('.vehicle-card').forEach(card => {
                 card.classList.remove('border-blue-500', 'bg-blue-50');
                 card.classList.add('border-gray-200');
@@ -1189,18 +1135,11 @@
 
         class Item {
             constructor(lane, type, wordText = null, isCorrect = false) {
-                this.lane = lane;
-                this.type = type; 
-                this.x = (lane * laneWidth) + (laneWidth / 2);
-                this.y = -60; 
-                this.isCorrect = isCorrect;
-                this.size = 90; 
+                this.lane = lane; this.type = type; this.x = (lane * laneWidth) + (laneWidth / 2); this.y = -60; this.isCorrect = isCorrect; this.size = 90; 
+                this.bouncing = false; this.vx = 0; this.vy = 0; this.rotation = 0;
                 
                 if (this.type === 'word') {
-                    this.word = wordText; 
-                    this.bgColor = '#ffffff';
-                    this.borderColor = '#64748b'; 
-                    this.textColor = '#0f172a'; 
+                    this.word = wordText; this.bgColor = '#ffffff'; this.borderColor = '#64748b'; this.textColor = '#0f172a'; 
                 } else if (this.type === 'coin') {
                     this.emoji = '🪙';
                 } else if (this.type === 'health') {
@@ -1210,104 +1149,76 @@
                 }
             }
 
-            update() {
-                this.y += currentSpeed;
+            update() { 
+                if (this.bouncing) {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    this.vy += 0.8;
+                    this.rotation += 0.2;
+                } else {
+                    this.y += currentSpeed; 
+                }
             }
 
             draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                if (this.bouncing) ctx.rotate(this.rotation);
+
                 if (this.type === 'word') {
                     const radius = 80;
-                    ctx.fillStyle = this.bgColor;
-                    ctx.strokeStyle = this.borderColor;
-                    ctx.lineWidth = 4;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.stroke();
+                    ctx.fillStyle = this.bgColor; ctx.strokeStyle = this.borderColor; ctx.lineWidth = 4;
+                    ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+                    ctx.fillStyle = this.textColor; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
                     
-                    ctx.fillStyle = this.textColor;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-
-                    const chars = Array.from(this.word);
-                    const toneMarks = ['ˊ', 'ˇ', 'ˋ'];
-                    const neutralTone = '˙';
-                    
+                    const chars = Array.from(this.word); const toneMarks = ['ˊ', 'ˇ', 'ˋ']; const neutralTone = '˙';
                     let drawList = [];
                     for (let i = 0; i < chars.length; i++) {
                         let char = chars[i];
-                        if (toneMarks.includes(char)) {
-                            if (drawList.length > 0) drawList[drawList.length - 1].tone = char;
-                        } else if (char === neutralTone) {
-                            if (drawList.length > 0) drawList[0].topTone = char; 
-                        } else {
-                            drawList.push({ char: char, tone: null, topTone: null });
-                        }
+                        if (toneMarks.includes(char)) { if (drawList.length > 0) drawList[drawList.length - 1].tone = char; }
+                        else if (char === neutralTone) { if (drawList.length > 0) drawList[0].topTone = char; }
+                        else { drawList.push({ char: char, tone: null, topTone: null }); }
                     }
 
-                    let fontSize = 80;
-                    let lineHeight = 80;
-                    let toneOffsetX = 35;
-                    
-                    if (drawList.length === 2) {
-                        fontSize = 50;
-                        lineHeight = 55;
-                        toneOffsetX = 25;
-                    } else if (drawList.length >= 3) {
-                        fontSize = 38;
-                        lineHeight = 42;
-                        toneOffsetX = 20;
-                    }
+                    let fontSize = 80, lineHeight = 80, toneOffsetX = 35;
+                    if (drawList.length === 2) { fontSize = 50; lineHeight = 55; toneOffsetX = 25; }
+                    else if (drawList.length >= 3) { fontSize = 38; lineHeight = 42; toneOffsetX = 20; }
 
                     ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
-                    
                     const totalHeight = drawList.length * lineHeight;
-                    let startY = this.y - (totalHeight / 2) + (lineHeight / 2);
+                    let startY = 0 - (totalHeight / 2) + (lineHeight / 2);
 
                     for (let i = 0; i < drawList.length; i++) {
                         let item = drawList[i];
-                        
-                        ctx.fillText(item.char, this.x, startY);
-                        
+                        ctx.fillText(item.char, 0, startY);
                         if (item.tone) {
                             ctx.font = `normal ${fontSize * 0.8}px "標楷體", "Nunito", sans-serif`;
-                            const toneOffsetY = fontSize * 0.25; 
-                            ctx.fillText(item.tone, this.x + toneOffsetX, startY - toneOffsetY);
+                            ctx.fillText(item.tone, toneOffsetX, startY - fontSize * 0.25);
                             ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
                         }
-                        
                         if (item.topTone) {
                             ctx.font = `normal ${fontSize * 0.8}px "標楷體", "Nunito", sans-serif`;
-                            ctx.fillText(item.topTone, this.x, startY - lineHeight * 0.6);
+                            ctx.fillText(item.topTone, 0, startY - lineHeight * 0.6);
                             ctx.font = `normal ${fontSize}px "標楷體", "Nunito", sans-serif`;
                         }
-                        
                         startY += lineHeight;
                     }
                 } else {
-                    ctx.font = '75px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(this.emoji, this.x, this.y);
+                    ctx.font = '75px Arial'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(this.emoji, 0, 0);
                 }
+                ctx.restore();
             }
         }
 
         function spawnItems() {
             traveledDistance += currentSpeed;
-
             if (!hasSpawnedItem && traveledDistance >= waveTriggerDistance + 150) {
                 if (currentVehicle !== 'bicycle') {
                     const lane = Math.floor(Math.random() * laneCount);
                     let type = 'coin';
                     const randChance = Math.random();
-                    
-                    if (randChance < 0.20 && lives < maxLives) {
-                        type = 'health';
-                    } else if (randChance < 0.50) {
-                        type = 'bomb';
-                    }
-
+                    if (randChance < 0.20 && lives < maxLives) type = 'health';
+                    else if (randChance < 0.50) type = 'bomb';
                     items.push(new Item(lane, type));
                 }
                 hasSpawnedItem = true;
@@ -1315,157 +1226,116 @@
 
             if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
                 const correctLane = Math.floor(Math.random() * laneCount);
-                let correctAnswer = "";
-                let shuffledWrongOptions = [];
+                let correctAnswer = ""; let shuffledWrongOptions = [];
 
                 if (selectedMode === 'radical') {
                     const words = currentBank[currentQuestion];
                     correctAnswer = words[Math.floor(Math.random() * words.length)];
-                    
                     let wrongWordsPool = [];
-                    questionKeys.forEach(k => {
-                        if (k !== currentQuestion) {
-                            wrongWordsPool = wrongWordsPool.concat(currentBank[k]);
-                        }
-                    });
+                    questionKeys.forEach(k => { if (k !== currentQuestion) wrongWordsPool = wrongWordsPool.concat(currentBank[k]); });
                     shuffledWrongOptions = shuffleArray([...new Set(wrongWordsPool)]);
                 } else {
                     const options = currentBank[currentQuestion];
                     correctAnswer = options[0];
-                    const wrongOptions = options.slice(1);
-                    shuffledWrongOptions = shuffleArray([...wrongOptions]);
+                    shuffledWrongOptions = shuffleArray([...options.slice(1)]);
                 }
                 
                 for (let i = 0; i < laneCount; i++) {
                     const isCorrect = (i === correctLane);
-                    let wordToDisplay;
-                    
-                    if (isCorrect) {
-                        wordToDisplay = correctAnswer;
-                    } else {
-                        if (shuffledWrongOptions.length > 0) {
-                            wordToDisplay = shuffledWrongOptions.pop();
-                        } else {
-                            wordToDisplay = "無";
-                        }
-                    }
-                    
+                    let wordToDisplay = isCorrect ? correctAnswer : (shuffledWrongOptions.length > 0 ? shuffledWrongOptions.pop() : "無");
                     items.push(new Item(i, 'word', wordToDisplay, isCorrect));
                 }
                 hasSpawnedWord = true;
             } 
         }
 
-        function showMiniFeedback(text, x, y, color) {
-            floatingTexts.push({ text, x, y, color, life: 40 });
-        }
-
+        function showMiniFeedback(text, x, y, color) { floatingTexts.push({ text, x, y, color, life: 40 }); }
         function drawFloatingTexts() {
             for (let i = floatingTexts.length - 1; i >= 0; i--) {
                 const ft = floatingTexts[i];
-                ctx.font = '900 28px Nunito';
-                ctx.textAlign = 'center';
-                ctx.lineWidth = 4;
-                ctx.strokeStyle = '#000';
-                ctx.strokeText(ft.text, ft.x, ft.y);
-                ctx.fillStyle = ft.color;
-                ctx.fillText(ft.text, ft.x, ft.y);
-                ft.y -= 2; 
-                ft.life--;
+                ctx.font = '900 28px Nunito'; ctx.textAlign = 'center'; ctx.lineWidth = 4; ctx.strokeStyle = '#000';
+                ctx.strokeText(ft.text, ft.x, ft.y); ctx.fillStyle = ft.color; ctx.fillText(ft.text, ft.x, ft.y);
+                ft.y -= 2; ft.life--;
                 if (ft.life <= 0) floatingTexts.splice(i, 1);
             }
         }
 
         function checkCollisions() {
-            let hitWord = false;
-            let wordFellOff = false;
-
+            let hitWord = false; let wordFellOff = false;
             for (let i = items.length - 1; i >= 0; i--) {
                 const item = items[i];
-                const yOverlap = Math.abs(player.y - item.y) < (player.height/2 + item.size/2 - 15); 
+                if (item.bouncing) continue; // 彈飛中不判定碰撞
 
+                const yOverlap = Math.abs(player.y - item.y) < (player.height/2 + item.size/2 - 15); 
                 const xOverlap = player.lane === item.lane;
 
                 if (yOverlap && xOverlap) {
                     if (item.type === 'word') {
-                        if (item.isCorrect) {
-                            handleCorrectAnswer();
-                        } else {
-                            handleWrongAnswer();
-                        }
-                        hitWord = true;
-                        break; 
+                        if (item.isCorrect) handleCorrectAnswer();
+                        else handleWrongAnswer();
+                        hitWord = true; break; 
                     } else if (item.type === 'coin') {
-                        SoundManager.playCoin();
-                        score += 5;
-                        scoreEl.textContent = score;
-                        showMiniFeedback('+5', item.x, item.y, '#fde047'); 
-                        items.splice(i, 1); 
+                        SoundManager.playCoin(); score += 5; scoreEl.textContent = score;
+                        showMiniFeedback('+5', item.x, item.y, '#fde047'); items.splice(i, 1); 
                     } else if (item.type === 'health') {
                         SoundManager.playHeart();
-                        if (lives < maxLives) {
-                            lives++;
-                            updateLivesDisplay();
-                        }
-                        showMiniFeedback('+1 ❤️', item.x, item.y, '#ef4444'); 
-                        items.splice(i, 1);
+                        if (lives < maxLives) { lives++; updateLivesDisplay(); }
+                        showMiniFeedback('+1 ❤️', item.x, item.y, '#ef4444'); items.splice(i, 1);
                     } else if (item.type === 'bomb') {
-                        SoundManager.playExplosion();
-                        lives--;
-                        updateLivesDisplay();
-                        showMiniFeedback('💥 -1', item.x, item.y, '#ef4444'); 
-                        showFeedback(feedbackWrong); 
-                        items.splice(i, 1);
-                        if (lives <= 0) endGame(false);
+                        if (nitroActive) {
+                            item.bouncing = true; // 彈開效果
+                            item.vx = (Math.random() > 0.5 ? 1 : -1) * 15;
+                            item.vy = -15;
+                            showMiniFeedback('🛡️ 彈開!', item.x, item.y, '#3b82f6');
+                        } else {
+                            SoundManager.playExplosion(); lives--; comboCorrect = 0;
+                            updateLivesDisplay();
+                            showMiniFeedback('💥 -1', item.x, item.y, '#ef4444'); 
+                            showFeedback(feedbackWrong); items.splice(i, 1);
+                            if (lives <= 0) endGame(false);
+                        }
                     }
                 } else if (item.y > canvasHeight + 60) {
-                    if (item.type === 'word') {
-                        wordFellOff = true;
-                    }
+                    if (item.type === 'word') wordFellOff = true;
                     items.splice(i, 1);
                 }
             }
 
             if (hitWord || wordFellOff) {
-                items = []; 
-                waveTriggerDistance = traveledDistance;
-                hasSpawnedItem = false;
-                hasSpawnedWord = false;
-                
-                if (wordFellOff) {
-                    generateQuestion();
-                }
+                items = []; waveTriggerDistance = traveledDistance;
+                hasSpawnedItem = false; hasSpawnedWord = false;
+                if (wordFellOff) generateQuestion();
             }
         }
 
-        function showFeedback(element) {
-            element.classList.remove('show-feedback');
-            void element.offsetWidth; 
-            element.classList.add('show-feedback');
-            setTimeout(() => element.classList.remove('show-feedback'), 800);
-        }
-
-        function updateLivesDisplay() {
-            let hearts = '';
-            for(let i=0; i<lives; i++) hearts += '❤️';
-            for(let i=lives; i<maxLives; i++) hearts += '🖤';
-            livesEl.textContent = hearts;
-        }
+        function showFeedback(element) { element.classList.remove('show-feedback'); void element.offsetWidth; element.classList.add('show-feedback'); setTimeout(() => element.classList.remove('show-feedback'), 800); }
+        function updateLivesDisplay() { let hearts = ''; for(let i=0; i<lives; i++) hearts += '❤️'; for(let i=lives; i<maxLives; i++) hearts += '🖤'; livesEl.textContent = hearts; }
 
         function handleCorrectAnswer() {
             SoundManager.playCorrect();
-            score += 10;
-            scoreEl.textContent = score;
-            correctCount++;
-            chaseScore++; // 答對拉近追捕距離
-            correctCountEl.textContent = correctCount; 
+            score += 10; scoreEl.textContent = score;
+            correctCount++; correctCountEl.textContent = correctCount; 
+            chaseScore++; 
             
-            if (currentSpeed < maxSpeed) {
-                currentSpeed += speedIncrement;
+            // 計程車連擊機制 (3連擊觸發無敵)
+            if (currentVehicle === 'taxi') {
+                comboCorrect++;
+                if (comboCorrect >= 3) {
+                    activateNitro();
+                    comboCorrect = 0;
+                } else if (comboCorrect > 1) {
+                    showMiniFeedback(comboCorrect + ' 連擊!', player.currentX, player.y - 80, '#f59e0b');
+                }
             }
+
+            if (nitroActive) {
+                if (preNitroSpeed < maxSpeed) preNitroSpeed += speedIncrement;
+            } else {
+                if (currentSpeed < maxSpeed) currentSpeed += speedIncrement;
+            }
+
             showFeedback(feedbackCorrect);
             
-            // 🚨 警車模式專屬破關條件：追捕進度達到 20 抓到紅色跑車！
             if (currentVehicle === 'police' && chaseScore >= 20) {
                 setTimeout(() => endGame(true), 500); 
             } else {
@@ -1475,148 +1345,93 @@
 
         function handleWrongAnswer() {
             SoundManager.playWrong();
-            lives--;
-            chaseScore = Math.max(0, chaseScore - 1); // 答錯距離拉長，最低退回0
-            updateLivesDisplay();
-            showFeedback(feedbackWrong);
+            lives--; comboCorrect = 0;
+            chaseScore = Math.max(0, chaseScore - 1); 
+
+            if (nitroActive) {
+                nitroActive = false;
+                SoundManager.bgmSpeedMultiplier = 1;
+                currentSpeed = preNitroSpeed;
+            }
+
+            updateLivesDisplay(); showFeedback(feedbackWrong);
             if (lives <= 0) endGame(false);
             else generateQuestion();
         }
 
         function gameLoop() {
             if (gameState !== 'PLAYING') return;
+
+            if (nitroActive && Date.now() > nitroEndTime) {
+                nitroActive = false;
+                SoundManager.bgmSpeedMultiplier = 1;
+                currentSpeed = preNitroSpeed;
+            }
+
             ctx.clearRect(0, 0, canvasWidth, canvasHeight);
             drawBackground();
+            updateRobberCar(); drawRobberCar();
+            updatePedestrians(); drawPedestrians();
+            updatePlayer(); drawPlayer(); drawNitroEffects();
             
-            // 畫出搶匪紅色跑車
-            updateRobberCar();
-            drawRobberCar();
-            
-            updatePlayer();
-            drawPlayer();
             spawnItems();
-            for (let i = 0; i < items.length; i++) {
-                items[i].update();
-                items[i].draw();
-            }
-            checkCollisions();
-            drawFloatingTexts();
+            for (let i = 0; i < items.length; i++) { items[i].update(); items[i].draw(); }
+            checkCollisions(); drawFloatingTexts();
             animationId = requestAnimationFrame(gameLoop);
         }
 
-        function showDifficultyMenu(mode) {
-            selectedMode = mode;
-            document.getElementById('mode-menu').classList.add('hidden');
-            if (mode === 'radical') {
-                document.getElementById('radical-menu').classList.remove('hidden');
-            } else {
-                document.getElementById('phonics-menu').classList.remove('hidden');
-            }
-        }
-
-        function backToModeMenu() {
-            document.getElementById('radical-menu').classList.add('hidden');
-            document.getElementById('phonics-menu').classList.add('hidden');
-            document.getElementById('mode-menu').classList.remove('hidden');
-        }
+        function showDifficultyMenu(mode) { selectedMode = mode; document.getElementById('mode-menu').classList.add('hidden'); document.getElementById(mode === 'radical' ? 'radical-menu' : 'phonics-menu').classList.remove('hidden'); }
+        function backToModeMenu() { document.getElementById('radical-menu').classList.add('hidden'); document.getElementById('phonics-menu').classList.add('hidden'); document.getElementById('mode-menu').classList.remove('hidden'); }
 
         function startGame(difficulty, mode) {
-            if (difficulty) {
-                currentDifficulty = difficulty;
-            }
-            if (mode) {
-                selectedMode = mode;
-            }
+            if (difficulty) currentDifficulty = difficulty;
+            if (mode) selectedMode = mode;
+            currentBank = selectedMode === 'radical' ? radicalQuestionBanks[currentDifficulty] : phonicsQuestionBanks[currentDifficulty];
             
-            if (selectedMode === 'radical') {
-                currentBank = radicalQuestionBanks[currentDifficulty];
-            } else {
-                currentBank = phonicsQuestionBanks[currentDifficulty];
-            }
-            
+            // 在這裡先設定 baseSpeed 讓後續 currentSpeed 有所依據
             baseSpeed = VEHICLE_PRESETS[currentVehicle].baseSpeed;
             questionKeys = Object.keys(currentBank);
 
-            document.getElementById('mode-menu').classList.add('hidden');
-            document.getElementById('phonics-menu').classList.add('hidden');
-            document.getElementById('radical-menu').classList.add('hidden');
-            gameOverMenu.classList.add('hidden');
+            document.querySelectorAll('.menu-overlay').forEach(el => el.classList.add('hidden'));
             
-            score = 0;
-            correctCount = 0; 
-            chaseScore = 0; // 重置追捕進度
-            lives = 3;
-            currentSpeed = baseSpeed; // 這裡會動態套用上面設定好的 baseSpeed
-            lastQuestion = null;
-
-            items = [];
-            floatingTexts = [];
-            traveledDistance = 0;
-            roadScrollOffset = 0;
+            score = 0; correctCount = 0; chaseScore = 0; comboCorrect = 0; lives = 3;
+            currentSpeed = baseSpeed; lastQuestion = null;
+            items = []; floatingTexts = []; pedestrians = [];
+            traveledDistance = 0; roadScrollOffset = 0; waveTriggerDistance = 0; pedestrianSpawnTimer = 0;
+            hasSpawnedItem = false; hasSpawnedWord = false; nitroActive = false; SoundManager.bgmSpeedMultiplier = 1;
+            player.targetLane = 1; player.lane = 1;
             
-            waveTriggerDistance = 0;
-            hasSpawnedItem = false;
-            hasSpawnedWord = false;
-
-            player.targetLane = 1;
-            player.lane = 1;
-            
-            // 🚨 初始化搶匪車的狀態與位置
             if (currentVehicle === 'police') {
-                robberCar.active = true;
-                robberCar.y = -300; // 初始在畫面最上方隱藏
-                robberCar.targetY = -300;
-                robberCar.currentX = (1 * laneWidth) + (laneWidth / 2);
-                robberCar.lane = 1;
-                robberCar.targetLane = 1;
-                robberCar.laneChangeTimer = 0;
-            } else {
-                robberCar.active = false;
-            }
+                robberCar.active = true; robberCar.y = -300; robberCar.targetY = -300; robberCar.currentX = (1 * laneWidth) + (laneWidth / 2);
+                robberCar.lane = 1; robberCar.targetLane = 1; robberCar.laneChangeTimer = 0;
+            } else { robberCar.active = false; }
             
-            scoreEl.textContent = score;
-            correctCountEl.textContent = correctCount; 
-            updateLivesDisplay();
+            // 強制設定圖示避免載入延遲
+            carImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS[currentVehicle].svg);
+            robberImage.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(VEHICLE_PRESETS['sports'].svg);
             
-            gameState = 'PLAYING';
-            generateQuestion();
-            
-            SoundManager.startBGM();
-
+            scoreEl.textContent = score; correctCountEl.textContent = correctCount; updateLivesDisplay();
+            gameState = 'PLAYING'; generateQuestion(); SoundManager.startBGM();
             if (animationId) cancelAnimationFrame(animationId);
+            
+            // 延遲更新車輛資訊避免初始化錯誤
+            setTimeout(() => { closeVehicleMenu(); document.getElementById('mode-menu').classList.add('hidden'); }, 10);
+            
             gameLoop();
         }
 
-        function resetGame() {
-            startGame(currentDifficulty, selectedMode);
-        }
-
-        function backToMenu() {
-            SoundManager.stopBGM();
-            gameOverMenu.classList.add('hidden');
-            document.getElementById('mode-menu').classList.remove('hidden');
-            questionTextEl.classList.add('hidden');
-        }
+        function resetGame() { startGame(currentDifficulty, selectedMode); }
+        function backToMenu() { SoundManager.stopBGM(); gameOverMenu.classList.add('hidden'); document.getElementById('mode-menu').classList.remove('hidden'); questionTextEl.classList.add('hidden'); }
 
         function endGame(isWin = false) {
-            gameState = 'GAMEOVER';
-            SoundManager.stopBGM();
-            cancelAnimationFrame(animationId);
-            finalScoreEl.textContent = score;
-            finalCorrectEl.textContent = correctCount; 
-            questionTextEl.classList.add('hidden');
-            
-            // 根據是否勝利 (警車抓到搶匪) 修改遊戲結束的標題
+            gameState = 'GAMEOVER'; SoundManager.stopBGM(); cancelAnimationFrame(animationId);
+            finalScoreEl.textContent = score; finalCorrectEl.textContent = correctCount; questionTextEl.classList.add('hidden');
             const gameOverTitle = document.getElementById('game-over-title');
             if (isWin) {
-                gameOverTitle.textContent = "🎉 成功逮捕搶匪！";
-                gameOverTitle.className = "text-4xl font-black mb-4 text-green-500";
-                SoundManager.playHeart(); 
+                gameOverTitle.textContent = "🎉 成功逮捕搶匪！"; gameOverTitle.className = "text-4xl font-black mb-4 text-green-500"; SoundManager.playHeart(); 
             } else {
-                gameOverTitle.textContent = "遊戲結束";
-                gameOverTitle.className = "text-4xl font-black mb-4 text-red-500";
+                gameOverTitle.textContent = "遊戲結束"; gameOverTitle.className = "text-4xl font-black mb-4 text-red-500";
             }
-            
             gameOverMenu.classList.remove('hidden');
         }
 
