@@ -2,8 +2,15 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>中文小遊戲</title>
+    <!-- 針對 iOS 的視口設定，禁止縮放與調整 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Apple Web App 專屬 Meta 標籤 (支援加入主畫面為全螢幕 App) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
+
+    <title>中文小遊戲，建議使用ios/safari遊玩</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
@@ -24,12 +31,20 @@
             overflow: hidden; 
             touch-action: none; 
             color: var(--text-color);
+            
+            /* Apple 系統優化：防止橡皮筋回彈與長按反白選取 */
+            overscroll-behavior: none;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
         }
 
         #game-container {
             position: relative;
             width: 100vw;
+            /* Apple 系統優化：使用 dvh 避免 Safari 底部網址列遮擋 */
             height: 100vh;
+            height: 100dvh; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -39,7 +54,8 @@
             position: absolute;
             top: 0;
             left: 0;
-            padding: 0.5rem;
+            /* Apple 系統優化：避開 iPhone 瀏海/動態島 */
+            padding: env(safe-area-inset-top, 0.5rem) 0.5rem 0.5rem env(safe-area-inset-left, 0.5rem);
             display: flex;
             flex-direction: column; 
             align-items: flex-start; 
@@ -76,7 +92,7 @@
 
         #question-area {
             position: absolute;
-            top: 7.5rem; 
+            top: calc(7.5rem + env(safe-area-inset-top, 0px)); 
             width: 100%;
             text-align: center;
             z-index: 10;
@@ -119,8 +135,9 @@
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
             border: 4px solid var(--accent-color);
             max-width: 90%;
-            max-height: 90vh;
+            max-height: 80dvh; /* Apple 優化 */
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* 讓 iOS 彈性滾動順暢 */
         }
 
         .btn {
@@ -135,6 +152,7 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
             width: 100%;
             margin-bottom: 0.75rem;
+            -webkit-tap-highlight-color: transparent; /* 移除 iOS 點擊高光 */
         }
 
         .btn:hover { filter: brightness(1.1); }
@@ -524,7 +542,7 @@
     };
 
     // ==========================================
-    // 🎵 音效管理器
+    // 🎵 音效管理器 (Apple 解鎖優化)
     // ==========================================
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
@@ -540,7 +558,7 @@
             if (audioCtx.state === 'suspended') audioCtx.resume();
         },
         playEngine() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(60, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 0.1); osc.frequency.linearRampToValueAtTime(40, audioCtx.currentTime + 0.3);
@@ -549,7 +567,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.3);
         },
         playExplosion() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const bufferSize = audioCtx.sampleRate * 0.5; const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
             const data = buffer.getChannelData(0);
             for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
@@ -559,7 +577,7 @@
             noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination); noise.start();
         },
         playCorrect() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime); osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.15);
@@ -568,7 +586,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.4);
         },
         playWrong() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sawtooth';
             osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 0.3);
@@ -577,7 +595,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.35);
         },
         playCoin() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'sine';
             osc.frequency.setValueAtTime(987.77, audioCtx.currentTime); osc.frequency.setValueAtTime(1318.51, audioCtx.currentTime + 0.08);
@@ -586,7 +604,7 @@
             osc.start(); osc.stop(audioCtx.currentTime + 0.2);
         },
         playHeart() {
-            if (!audioCtx) return;
+            if (!audioCtx || audioCtx.state === 'suspended') return;
             const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
             osc.type = 'triangle'; const now = audioCtx.currentTime;
             osc.frequency.setValueAtTime(523.25, now); osc.frequency.setValueAtTime(659.25, now + 0.08); osc.frequency.setValueAtTime(783.99, now + 0.16); osc.frequency.setValueAtTime(1046.50, now + 0.24);
@@ -600,7 +618,7 @@
             this.isPlayingBGM = true; this.nextNoteTime = audioCtx.currentTime + 0.1; this.noteIndex = 0;
             const bassNotes = [130.81, 130.81, 196.00, 196.00, 155.56, 155.56, 174.61, 174.61];
             const playNote = (time, freq) => {
-                if (!this.isPlayingBGM) return;
+                if (!this.isPlayingBGM || audioCtx.state === 'suspended') return;
                 const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
                 osc.type = 'square'; osc.frequency.value = freq;
                 gain.gain.setValueAtTime(0.02, time); gain.gain.exponentialRampToValueAtTime(0.001, time + 0.2);
@@ -621,6 +639,15 @@
             if (this.bgmInterval) clearInterval(this.bgmInterval);
         }
     };
+
+    // Apple 系統必須由使用者互動來解鎖 AudioContext
+    const unlockAudio = () => {
+        SoundManager.init();
+        document.removeEventListener('touchstart', unlockAudio);
+        document.removeEventListener('mousedown', unlockAudio);
+    };
+    document.addEventListener('touchstart', unlockAudio, { once: true });
+    document.addEventListener('mousedown', unlockAudio, { once: true });
 
     // ==========================================
     // 📚 題庫
@@ -810,17 +837,23 @@
     let touchStartX = 0, touchStartY = 0, touchStartTime = 0;
     canvas.addEventListener('touchstart', (e) => {
         if (gameState !== 'PLAYING') return;
-        e.preventDefault();
+        // e.preventDefault(); /* 這裡不可用，否則按鈕將失效。交給 body 的 touch-action: none 處理 */
         if (e.touches.length > 0) {
             touchStartX = e.touches[0].clientX;
             touchStartY = e.touches[0].clientY;
             touchStartTime = Date.now();
         }
     }, { passive: false });
-    canvas.addEventListener('touchmove', (e) => { if (gameState !== 'PLAYING') return; e.preventDefault(); }, { passive: false });
+    
+    // Apple 系統防止畫面隨手指拖動
+    canvas.addEventListener('touchmove', (e) => { 
+        if (gameState !== 'PLAYING') return; 
+        e.preventDefault(); 
+    }, { passive: false });
+    
     canvas.addEventListener('touchend', (e) => {
         if (gameState !== 'PLAYING') return;
-        e.preventDefault();
+        // e.preventDefault(); 
         if (e.changedTouches.length > 0) {
             const dx = e.changedTouches[0].clientX - touchStartX;
             const dy = e.changedTouches[0].clientY - touchStartY;
@@ -886,12 +919,10 @@
         for (let i = pedestrians.length - 1; i >= 0; i--) {
             const p = pedestrians[i];
             if (p.bouncing) {
-                // 彈飛的物理更新 (加上旋轉)
                 p.x += p.vx; p.y += p.vy; p.vy += 0.8; p.rotation += p.rotationSpeed || 0.2;
             } else {
                 p.x += p.speed * p.direction; p.y += currentSpeed;
             }
-            // 防止往上彈出時提早消失 (改為 y < -300)
             if (p.x < -100 || p.x > canvasWidth + 100 || p.y > canvasHeight + 100 || p.y < -300) {
                 pedestrians.splice(i, 1); continue;
             }
@@ -903,7 +934,6 @@
             if (!p.bouncing && pLeft < p.x + p.width && pRight > p.x - p.width && pTop < p.y + p.height && pBottom > p.y - p.height) {
                 if (nitroActive) {
                     p.bouncing = true;
-                    // 行人被撞飛的角度與速度隨機化
                     p.vx = (Math.random() - 0.5) * 40; 
                     p.vy = -(Math.random() * 20 + 15);
                     p.rotationSpeed = (Math.random() - 0.5) * 0.8;
@@ -1048,7 +1078,6 @@
         }
         update() {
             if (this.bouncing) {
-                // 更新彈出效果 (受重力與旋轉影響)
                 this.x += this.vx; this.y += this.vy; this.vy += 0.8; this.rotation += this.rotationSpeed || 0.2;
             } else {
                 this.y += currentSpeed;
@@ -1152,7 +1181,7 @@
     }
 
     // ==========================================
-    // ✅ 碰撞檢測與更新
+    // 碰撞檢測與更新
     // ==========================================
     function checkCollisions() {
         let hitWord = false;
@@ -1160,7 +1189,6 @@
 
         for (let i = items.length - 1; i >= 0; i--) {
             const item = items[i];
-            // 已經在彈飛狀態的物件不再觸發碰撞
             if (item.bouncing) continue;
 
             const yOverlap = Math.abs(player.y - item.y) < (player.height / 2 + item.size / 2 - 15);
@@ -1169,19 +1197,16 @@
             if (yOverlap && xOverlap) {
                 if (item.type === 'word') {
                     if (item.isCorrect) {
-                        // ── 正確答案 ──
                         handleCorrectAnswer();
                     } else if (nitroActive && currentVehicle === 'taxi') {
-                        // ── 錯誤答案 & 計程車無敵狀態: 隨機角度撞開它 ──
                         item.bouncing = true;
-                        item.vx = (Math.random() - 0.5) * 40;  // 隨機左右 X 方向 (-20 到 20)
-                        item.vy = -(Math.random() * 20 + 15);  // 隨機往上 Y 方向 (-15 到 -35)
-                        item.rotationSpeed = (Math.random() - 0.5) * 0.8; // 隨機旋轉
+                        item.vx = (Math.random() - 0.5) * 40;  
+                        item.vy = -(Math.random() * 20 + 15);  
+                        item.rotationSpeed = (Math.random() - 0.5) * 0.8; 
                         showMiniFeedback('🛡️ 彈開!', item.x, item.y, '#3b82f6');
                         SoundManager.playEngine();
                         generateQuestion();
                     } else {
-                        // ── 錯誤答案 (普通狀態) ──
                         handleWrongAnswer();
                     }
                     hitWord = true;
@@ -1198,7 +1223,7 @@
                 } else if (item.type === 'bomb') {
                     if (nitroActive) {
                         item.bouncing = true;
-                        item.vx = (Math.random() - 0.5) * 40; // 炸彈隨機角度彈飛
+                        item.vx = (Math.random() - 0.5) * 40; 
                         item.vy = -(Math.random() * 20 + 15);
                         item.rotationSpeed = (Math.random() - 0.5) * 0.8;
                         showMiniFeedback('🛡️ 彈開!', item.x, item.y, '#3b82f6');
@@ -1212,13 +1237,11 @@
                     }
                 }
             } else if (item.y > canvasHeight + 60) {
-                // 若物件跑出畫面 (而且不是正處於彈出狀態的)，處理扣血
                 if (item.type === 'word' && !item.bouncing) wordFellOff = true;
                 items.splice(i, 1);
             }
         }
 
-        // 換題時只保留「正在彈飛」的物件，讓玩家能看到錯誤泡泡飛走
         if (hitWord || wordFellOff) {
             items = items.filter(item => item.bouncing);
             waveTriggerDistance = traveledDistance;
@@ -1277,7 +1300,6 @@
         lives--; comboCorrect = 0;
         chaseScore = Math.max(0, chaseScore - 1);
 
-        // 非計程車才解除無敵
         if (nitroActive && currentVehicle !== 'taxi') {
             nitroActive = false;
             SoundManager.bgmSpeedMultiplier = 1;
