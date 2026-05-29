@@ -1611,7 +1611,7 @@
         
         if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
             // 【新增】安全距離檢查：如果畫面上半部 (y < 250) 已經有行人，延遲泡泡生成
-            let isPedestrianTooClose = pedestrians.some(p => p.y < 250);
+            let isPedestrianTooClose = pedestrians.some(p => p.y < 350);
             if (isPedestrianTooClose) {
                 traveledDistance -= currentSpeed; // 暫停里程累加，讓泡泡等行人離開上方再掉下來
                 return;
