@@ -1369,6 +1369,49 @@
             }
         }
     }
+
+     function updatePedestrians() {
+        if (currentVehicle !== 'taxi') return;
+        pedestrianSpawnTimer++;
+        if (pedestrianSpawnTimer > 180) {
+            pedestrianSpawnTimer = 0;
+            if (Math.random() < 0.6) spawnPedestrian();
+        }
+        for (let i = pedestrians.length - 1; i >= 0; i--) {
+            const p = pedestrians[i];
+            if (p.bouncing) {
+                // 彈飛的物理更新 (加上旋轉)
+                p.x += p.vx; p.y += p.vy; p.vy += 0.8; p.rotation += p.rotationSpeed || 0.2;
+            } else {
+                p.x += p.speed * p.direction; p.y += currentSpeed;
+            }
+            // 防止往上彈出時提早消失 (改為 y < -300)
+            if (p.x < -100 || p.x > canvasWidth + 100 || p.y > canvasHeight + 100 || p.y < -300) {
+                pedestrians.splice(i, 1); continue;
+            }
+            const pLeft = player.currentX - player.width / 2;
+            const pRight = player.currentX + player.width / 2;
+            const pTop = player.y - player.height / 2;
+            const pBottom = player.y + player.height / 2;
+            
+            if (!p.bouncing && pLeft < p.x + p.width && pRight > p.x - p.width && pTop < p.y + p.height && pBottom > p.y - p.height) {
+                if (nitroActive) {
+                    p.bouncing = true;
+                    // 行人被撞飛的角度與速度隨機化
+                    p.vx = (Math.random() - 0.5) * 40; 
+                    p.vy = -(Math.random() * 20 + 15);
+                    p.rotationSpeed = (Math.random() - 0.5) * 0.8;
+                    showMiniFeedback('🛡️ 撞飛!', p.x, p.y, '#3b82f6');
+                } else {
+                    lives--; updateLivesDisplay(); SoundManager.playExplosion();
+                    showFeedback(feedbackWrong);
+                    showMiniFeedback('💥 撞到行人', p.x, p.y, '#ef4444');
+                    comboCorrect = 0; pedestrians.splice(i, 1);
+                    if (lives <= 0) endGame(false);
+                }
+            }
+        }
+    }
     function drawPedestrians() {
         if (currentVehicle !== 'taxi') return;
         pedestrians.forEach(p => {
@@ -1552,7 +1595,7 @@
     }
 
     // ── Spawn ──
-    function spawnItems() {
+  function spawnItems() {
         traveledDistance += currentSpeed;
         if (!hasSpawnedItem && traveledDistance >= waveTriggerDistance + 150) {
             if (currentVehicle !== 'bicycle') {
@@ -1565,7 +1608,15 @@
             }
             hasSpawnedItem = true;
         }
+        
         if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
+            // 【新增】安全距離檢查：如果畫面上半部 (y < 250) 已經有行人，延遲泡泡生成
+            let isPedestrianTooClose = pedestrians.some(p => p.y < 250);
+            if (isPedestrianTooClose) {
+                traveledDistance -= currentSpeed; // 暫停里程累加，讓泡泡等行人離開上方再掉下來
+                return;
+            }
+
             const correctLane = Math.floor(Math.random() * laneCount);
             let correctAnswer = '', shuffledWrongOptions = [];
             if (selectedMode === 'radical') {
