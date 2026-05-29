@@ -1336,8 +1336,8 @@ function updatePedestrians() {
         if (pedestrianSpawnTimer > 180) {
             pedestrianSpawnTimer = 0;
             
-            // 【新增】安全距離檢查：判斷畫面上半部 (y < 350) 是否已經有答案泡泡
-            let isWordTooClose = items.some(item => item.type === 'word' && item.y < 350);
+            // 【新增】安全距離檢查：判斷畫面上半部 (y < 250) 是否已經有答案泡泡
+            let isWordTooClose = items.some(item => item.type === 'word' && item.y < 250);
             
             // 只有在沒有泡泡擋住的情況下，才允許生成行人
             if (!isWordTooClose && Math.random() < 0.6) {
@@ -1617,8 +1617,8 @@ function updatePedestrians() {
         }
         
         if (!hasSpawnedWord && traveledDistance >= waveTriggerDistance + 500) {
-            // 【新增】安全距離檢查：如果畫面上半部 (y < 350) 已經有行人，延遲泡泡生成
-            let isPedestrianTooClose = pedestrians.some(p => p.y < 350);
+            // 【新增】安全距離檢查：如果畫面上半部 (y < 250) 已經有行人，延遲泡泡生成
+            let isPedestrianTooClose = pedestrians.some(p => p.y < 250);
             if (isPedestrianTooClose) {
                 traveledDistance -= currentSpeed; // 暫停里程累加，讓泡泡等行人離開上方再掉下來
                 return;
